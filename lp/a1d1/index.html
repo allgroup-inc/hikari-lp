@@ -3,197 +3,274 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>回線診断｜その回線、3年前の契約のままですか？</title>
-<meta name="description" content="郵便番号だけで30秒。今の回線が今のエリアで適正か、無料で診断します。この場での申込手続きはありません。">
+<title>回線の見直し診断｜郵便番号だけで30秒・相談無料</title>
+<meta name="description" content="この3年で光回線の選択肢は変わりました。お住まいのエリアで今いちばん条件のいい回線を、郵便番号だけで30秒お調べします。相談無料・このページで契約手続きはありません。">
 <meta name="robots" content="noindex, nofollow">
 <!--
   ============================================================================
   LP ID   : a1d1   （訴求A1: 損の可視化 × デザインD1: 1画面完結型)
   役割    : ベースライン。「勝つLP」ではなく「動かない物差し」(ab-chan)
   配信    : Phase 1 (Week1-4) は本LP単独100%配信。A/Bは開始しない
-  壁打ち  : lp-kun(構造) / shinri-san(感情) / ab-chan(検証)
+  壁打ち  : lp-kun(構造) / shinri-san(感情) / ab-chan(検証) / risk-chan(守り)
   ---------------------------------------------------------------------------
-  ⚠️ 配信前に必ず設定が必要な箇所は「TODO(必須)」で検索すること。
-     未設定のまま配信すると、リードが1件も届かない or エリア外配信になる。
+  ■ 2026-07-17 改修（小柳さんレビュー反映）
+    指摘:「安心感がない。実績や結果の明記がほしい。NUROやキャリアの記載が
+           あると安心。デザインが怖い。落ち着いた中に見やすさと親近感を」
+
+    対応と、その際の判断:
+    - FVコピーをB案（主語を市場側に置く）へ変更。
+      shinri-san の分析:「〜のままですか？」は疑問形＋二人称でユーザーの
+      過失を問い詰める形。損失回避は発火するが発火源が自分の怠慢のため
+      防衛反応＝離脱に化ける。「怖い」の実体は配色ではなくここ。
+      旧A案は比較セクションの見出しに降格して活かしている。
+    - 配色を緑＋白へ刷新。ただし【全4本共通の定数】として凍結する。
+      ab-chan: D1に緑白・D2に濃紺が残ると構造と配色が完全交絡し、
+      D軸の差が構造由来か配色由来か事後に分離不能になる。
+      配色単独の検証にはn=13,900/群＝約33ヶ月かかるため検証対象になり得ず、
+      経営判断で決め打ちして定数化するのが唯一の正解。
+      → 配色を変える場合は4本すべて同時に変えること。1本だけ変えない。
+    - CTAだけは高コントラストの暖色を維持（lp-kun / ab-chan 双方が指摘）。
+      全部を緑にするとCTAが背景に溶けてCVRが落ちる。刷新の明示的な例外。
+    - 安心3点セットは独立セクションにせず「流れ」に吸収（lp-kun）。
+      少数意見(shinri-san):「安心は目立たせないと意味がない」→ 独立セクション化。
+      → Phase 3 のA/B候補として起票済み。今回は lp-kun 案を採用。
+    - スクロール増の相殺: 比較表 4行→3行、FAQ 4問→3問（lp-kun）
+
+  ■ TODO(必須) で検索すること。配信前に潰す必要がある。
   ============================================================================
 -->
 <style>
+  /* ══════════════════════════════════════════════════════════
+     デザイントークン
+     ⚠️ この配色は【全4本(A1D1/A1D2/A2D1/A2D2)共通の定数】。
+        1本だけ変えるとD軸と交絡してテストが無意味になる（ab-chan）。
+        変更する場合は4本同時に、かつ配信開始前に限る。
+     ══════════════════════════════════════════════════════════ */
   :root{
-    --navy:#0f2942; --blue:#1565d8; --blue-dark:#0d4ba8;
-    --ink:#1a2332; --sub:#5b6b7f; --line:#e3e8ef;
-    --bg:#ffffff; --bg-soft:#f5f8fc; --warn:#c2410c;
-    --ok:#0f7b4f; --radius:12px;
+    --green-900:#1b4332;   /* 見出し */
+    --green-700:#2d6a4f;
+    --green-600:#40916c;   /* アクセント */
+    --green-100:#e4f2e9;
+    --green-50:#f3faf6;    /* 面 */
+    --cta:#e8722c;         /* ⚠️ 刷新の例外。CTAだけは高コントラストの暖色を保つ */
+    --cta-dark:#cf5f1d;
+    --ink:#23302a;
+    --sub:#5f6f67;
+    --line:#dfeae4;
+    --white:#ffffff;
+    --r:18px;              /* 丸み。親近感のため大きめ */
+    --r-pill:999px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{
     font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",Meiryo,sans-serif;
-    color:var(--ink); background:var(--bg); line-height:1.75;
-    -webkit-text-size-adjust:100%; font-size:16px;
+    color:var(--ink); background:var(--white);
+    /* 「見やすさ」の体感は文字サイズより行間とコントラストで決まる(lp-kun)。
+       本文は17px・行間1.9で、サイズを上げすぎずに読みやすさを取る */
+    font-size:17px; line-height:1.9;
+    -webkit-text-size-adjust:100%;
   }
-  .wrap{max-width:600px;margin:0 auto;padding:0 20px}
-  section{padding:44px 0}
-  h2{font-size:1.3rem;line-height:1.5;letter-spacing:.01em;margin-bottom:20px;color:var(--navy)}
-  p{margin-bottom:14px}
-  .sub{color:var(--sub);font-size:.9rem}
-  .tiny{font-size:.78rem;color:var(--sub);line-height:1.6}
+  .wrap{max-width:600px;margin:0 auto;padding:0 22px}
+  /* 余白はセクション間に集約し、セクション内は詰める(lp-kun)。
+     均等に撒くとスクロールだけ伸びて読みやすさは上がらない */
+  section{padding:56px 0}
+  h2{
+    font-size:1.36rem; line-height:1.6; margin-bottom:22px;
+    color:var(--green-900); letter-spacing:.01em;
+  }
+  p{margin-bottom:16px}
+  .sub{color:var(--sub);font-size:.95rem}
+  .tiny{font-size:.82rem;color:var(--sub);line-height:1.7}
+  .soft{background:var(--green-50)}
 
   /* ---------- FV ---------- */
+  /* 濃紺グラデ(#0f2942)をやめ、白〜淡緑に。「怖い」の主因のひとつ */
   .hero{
-    background:linear-gradient(168deg,#0f2942 0%,#1a3f63 100%);
-    color:#fff; padding:40px 0 36px;
+    background:linear-gradient(180deg,var(--green-50) 0%, var(--white) 100%);
+    padding:22px 0 40px; border-bottom:1px solid var(--line);
   }
+  /* 帰属表示: 「誰が言っているか分からない」が怖さの本体。1行で解ける(lp-kun) */
+  .attrib{
+    display:inline-flex; align-items:center; gap:7px;
+    font-size:.8rem; color:var(--green-700); font-weight:700;
+    background:var(--green-100); border-radius:var(--r-pill);
+    padding:6px 14px; margin-bottom:22px;
+  }
+  .attrib::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green-600)}
   .hero h1{
-    font-size:1.72rem; line-height:1.45; letter-spacing:.005em;
-    margin-bottom:14px; font-weight:700;
+    font-size:1.78rem; line-height:1.55; font-weight:700;
+    color:var(--green-900); margin-bottom:16px; letter-spacing:.005em;
   }
   .hero h1 .em{
-    background:linear-gradient(transparent 62%, rgba(255,193,7,.45) 62%);
+    background:linear-gradient(transparent 64%, var(--green-100) 64%);
   }
-  .hero .lead{color:#c8dcf0;font-size:.97rem;margin-bottom:26px}
-  .hero .badge{
-    display:inline-block;background:rgba(255,255,255,.12);
-    border:1px solid rgba(255,255,255,.22);
-    color:#dbeafe;font-size:.75rem;padding:5px 12px;
-    border-radius:99px;margin-bottom:16px;letter-spacing:.04em;
-  }
+  .hero .lead{color:var(--sub);font-size:1rem;margin-bottom:26px}
 
   /* ---------- 診断カード ---------- */
   .card{
-    background:#fff;border-radius:var(--radius);padding:22px 18px;
-    box-shadow:0 8px 28px rgba(9,30,66,.18);
+    background:var(--white); border:1px solid var(--line);
+    border-radius:var(--r); padding:24px 20px;
+    box-shadow:0 6px 24px rgba(27,67,50,.07);
   }
-  .card label{
-    display:block;font-weight:700;font-size:.92rem;
-    color:var(--ink);margin-bottom:8px;
+  .card label{display:block;font-weight:700;font-size:.98rem;margin-bottom:10px}
+  .card input[type=text]{
+    width:100%; font-size:1.32rem; letter-spacing:.16em; text-align:center;
+    padding:16px 12px; border:2px solid var(--line); border-radius:14px;
+    font-family:inherit; background:var(--white); color:var(--ink);
   }
-  .zip-row{display:flex;gap:8px;align-items:stretch}
-  .zip-row input{
-    flex:1;font-size:1.22rem;letter-spacing:.14em;padding:13px 12px;
-    border:2px solid var(--line);border-radius:9px;width:100%;
-    font-family:inherit;text-align:center;
-  }
-  .zip-row input:focus{outline:none;border-color:var(--blue)}
+  .card input[type=text]:focus{outline:none;border-color:var(--green-600);background:var(--green-50)}
   .btn{
-    display:block;width:100%;border:none;cursor:pointer;
-    background:linear-gradient(180deg,#ff8f3c,#f4691a);
-    color:#fff;font-size:1.06rem;font-weight:700;
-    padding:16px 14px;border-radius:10px;font-family:inherit;
-    box-shadow:0 4px 14px rgba(244,105,26,.34); letter-spacing:.01em;
-    transition:transform .08s ease, box-shadow .15s ease;
+    display:block; width:100%; border:none; cursor:pointer;
+    background:var(--cta); color:var(--white);
+    font-size:1.08rem; font-weight:700; font-family:inherit;
+    padding:17px 16px; border-radius:var(--r-pill);
+    box-shadow:0 4px 14px rgba(232,114,44,.28);
+    letter-spacing:.01em; transition:background .15s, transform .08s;
   }
-  .btn:hover{box-shadow:0 6px 18px rgba(244,105,26,.42)}
+  .btn:hover{background:var(--cta-dark)}
   .btn:active{transform:translateY(1px)}
-  .btn:disabled{opacity:.5;cursor:not-allowed;box-shadow:none}
-  .btn-sub{
-    background:none;border:2px solid var(--blue);color:var(--blue);
-    box-shadow:none;font-size:.97rem;padding:13px;
+  .btn:disabled{opacity:.55;cursor:not-allowed;box-shadow:none}
+  .card .btn{margin-top:16px}
+  .note-under-btn{margin-top:12px;text-align:center}
+  .err{color:#b3401a;font-size:.86rem;margin-top:9px;display:none;font-weight:700}
+
+  /* 安心3点の圧縮版。CTA直下＝不安が最大化する地点 */
+  .trust-mini{
+    display:flex; flex-wrap:wrap; gap:6px 10px; justify-content:center;
+    margin-top:16px; font-size:.8rem; color:var(--green-700); font-weight:700;
   }
-  .btn-sub:hover{background:#f0f6ff;box-shadow:none}
-  .card .btn{margin-top:14px}
-  .note-under-btn{margin-top:10px;text-align:center}
-  .err{color:var(--warn);font-size:.83rem;margin-top:8px;display:none;font-weight:700}
+  .trust-mini span{
+    background:var(--green-100); border-radius:var(--r-pill); padding:5px 12px;
+  }
+  /* 対応回線の1行キャプション。診断の信頼性の根拠としてFVで効く(lp-kun) */
+  .carriers-line{
+    margin-top:18px; text-align:center; font-size:.83rem;
+    color:var(--sub); line-height:1.7;
+  }
 
   /* ---------- 診断結果 ---------- */
-  .result{display:none;margin-top:16px;border-top:1px solid var(--line);padding-top:18px}
+  .result{display:none;margin-top:20px;border-top:1px solid var(--line);padding-top:20px}
   .result.show{display:block;animation:fade .35s ease}
   @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
   .result-head{
-    font-size:.74rem;letter-spacing:.1em;color:var(--sub);
-    font-weight:700;margin-bottom:6px;
+    font-size:.75rem;letter-spacing:.12em;color:var(--sub);
+    font-weight:700;margin-bottom:8px;
   }
-  .result-title{font-size:1.14rem;font-weight:700;line-height:1.5;margin-bottom:10px}
-  .result-title.in{color:var(--ok)}
-  .result-title.out{color:var(--navy)}
-  .result-body{font-size:.9rem;color:var(--sub);margin-bottom:16px}
+  .result-title{font-size:1.16rem;font-weight:700;line-height:1.6;margin-bottom:12px}
+  .result-title.in{color:var(--green-700)}
+  .result-title.out{color:var(--green-900)}
+  .result-body{font-size:.93rem;color:var(--sub);margin-bottom:18px}
 
   /* ---------- 比較表 ---------- */
-  .tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
-  table{border-collapse:collapse;width:100%;font-size:.87rem;min-width:420px}
-  th,td{border:1px solid var(--line);padding:11px 10px;text-align:left;vertical-align:top}
-  thead th{background:var(--navy);color:#fff;font-size:.8rem;font-weight:700}
-  tbody th{background:var(--bg-soft);font-weight:700;width:30%;color:var(--navy)}
-  td.hl{background:#fff8ed}
+  .tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:24px 0 16px;
+    border-radius:14px; border:1px solid var(--line)}
+  /* 2列3行なので min-width は置かない。横スクロールを強制すると
+     セル内文字が切れて「見やすさ」が落ちる（小柳さんレビュー反映） */
+  table{border-collapse:collapse;width:100%;font-size:.9rem}
+  th,td{border-bottom:1px solid var(--line);padding:14px 12px;text-align:left;vertical-align:top}
+  tbody tr:last-child th, tbody tr:last-child td{border-bottom:none}
+  thead th{background:var(--green-700);color:var(--white);font-size:.84rem;font-weight:700;border-bottom:none}
+  tbody th{background:var(--green-50);font-weight:700;width:32%;color:var(--green-900)}
 
-  /* ---------- ステップ ---------- */
+  /* ---------- 流れ + 安心3点（吸収） ---------- */
   .steps{counter-reset:s;list-style:none}
   .steps li{
-    counter-increment:s;position:relative;padding-left:44px;
-    margin-bottom:18px;font-size:.93rem;
+    counter-increment:s; position:relative; padding-left:50px; margin-bottom:26px;
   }
   .steps li::before{
-    content:counter(s);position:absolute;left:0;top:1px;
-    width:30px;height:30px;border-radius:50%;
-    background:var(--blue);color:#fff;
+    content:counter(s); position:absolute; left:0; top:2px;
+    width:34px;height:34px;border-radius:50%;
+    background:var(--green-600); color:var(--white);
     display:flex;align-items:center;justify-content:center;
-    font-weight:700;font-size:.88rem;
+    font-weight:700;font-size:.92rem;
   }
-  .steps b{display:block;color:var(--navy)}
-
+  .steps b{display:block;color:var(--green-900);font-size:1.02rem;margin-bottom:2px}
+  .steps .sub{font-size:.92rem;display:block}
   .callout{
-    background:#f0f6ff;border-left:4px solid var(--blue);
-    padding:14px 16px;border-radius:0 8px 8px 0;font-size:.88rem;
+    background:var(--white); border:1px solid var(--green-100);
+    border-left:4px solid var(--green-600);
+    padding:16px 18px; border-radius:0 14px 14px 0; font-size:.93rem;
   }
-  .callout.soft{background:var(--bg-soft);border-left-color:var(--sub)}
+
+  /* ---------- 運営会社 ---------- */
+  .company-q{
+    font-size:1.24rem;font-weight:700;color:var(--green-900);
+    line-height:1.6;margin-bottom:20px;
+  }
+  .company-body p{font-size:.97rem}
+  .company-sign{
+    margin-top:24px;padding:18px 20px;background:var(--white);
+    border:1px solid var(--line);border-radius:14px;font-size:.9rem;
+  }
+  .company-sign b{color:var(--green-900);font-size:1rem;display:block;margin-bottom:6px}
+  .company-sign .tiny{margin-top:8px}
 
   /* ---------- FAQ ---------- */
-  details{border-bottom:1px solid var(--line);padding:14px 0}
+  details{border-bottom:1px solid var(--line);padding:16px 0}
   summary{
-    cursor:pointer;font-weight:700;font-size:.93rem;
-    list-style:none;position:relative;padding-right:28px;color:var(--navy);
+    cursor:pointer;font-weight:700;font-size:.98rem;list-style:none;
+    position:relative;padding-right:30px;color:var(--green-900);line-height:1.6;
   }
   summary::-webkit-details-marker{display:none}
   summary::after{
-    content:"+";position:absolute;right:4px;top:-2px;
-    font-size:1.3rem;color:var(--blue);font-weight:400;
+    content:"+";position:absolute;right:2px;top:-3px;
+    font-size:1.4rem;color:var(--green-600);font-weight:400;
   }
   details[open] summary::after{content:"–"}
-  details p{margin:12px 0 0;font-size:.88rem;color:var(--sub)}
+  details p{margin:12px 0 0;font-size:.92rem;color:var(--sub)}
 
   /* ---------- フォーム ---------- */
-  .form-sec{background:var(--bg-soft)}
-  .field{margin-bottom:18px}
-  .field label{display:block;font-weight:700;font-size:.9rem;margin-bottom:7px}
-  .field .opt{font-weight:400;color:var(--sub);font-size:.78rem;margin-left:6px}
+  .field{margin-bottom:22px}
+  .field label{display:block;font-weight:700;font-size:.96rem;margin-bottom:9px}
+  .field .opt{font-weight:400;color:var(--sub);font-size:.8rem;margin-left:7px}
   .field input[type=text],.field input[type=tel]{
-    width:100%;font-size:1.02rem;padding:13px 12px;
-    border:2px solid var(--line);border-radius:9px;font-family:inherit;background:#fff;
+    width:100%;font-size:1.06rem;padding:15px 14px;
+    border:2px solid var(--line);border-radius:14px;font-family:inherit;background:var(--white);
   }
-  .field input:focus{outline:none;border-color:var(--blue)}
-  .field input[readonly]{background:#eef2f7;color:var(--sub)}
-  .micro{font-size:.78rem;color:var(--sub);margin-top:6px;line-height:1.55}
-  .tabs{display:flex;gap:8px;margin-bottom:10px}
+  .field input:focus{outline:none;border-color:var(--green-600)}
+  .field input[readonly]{background:var(--green-50);color:var(--sub)}
+  .micro{font-size:.82rem;color:var(--sub);margin-top:8px;line-height:1.7}
+  .tabs{display:flex;gap:10px;margin-bottom:12px}
   .tab{
-    flex:1;text-align:center;padding:11px;border:2px solid var(--line);
-    border-radius:9px;cursor:pointer;font-size:.9rem;font-weight:700;
-    background:#fff;color:var(--sub);font-family:inherit;
+    flex:1;text-align:center;padding:13px;border:2px solid var(--line);
+    border-radius:var(--r-pill);cursor:pointer;font-size:.95rem;font-weight:700;
+    background:var(--white);color:var(--sub);font-family:inherit;
   }
-  .tab[aria-selected=true]{border-color:var(--blue);background:#f0f6ff;color:var(--blue)}
+  .tab[aria-selected=true]{border-color:var(--green-600);background:var(--green-50);color:var(--green-700)}
   .promise{
-    background:#fff;border:1px solid var(--line);border-radius:9px;
-    padding:14px 16px;margin-bottom:20px;font-size:.88rem;
+    background:var(--white);border:1px solid var(--green-100);
+    border-radius:14px;padding:16px 18px;margin-bottom:22px;font-size:.93rem;
   }
-  .promise b{color:var(--navy)}
+  .promise b{color:var(--green-900)}
+  /* フォーム直上の運営者2行。個人情報を渡す直前が運営者情報の需要のピーク(lp-kun) */
+  .form-attrib{
+    font-size:.86rem;color:var(--sub);background:var(--green-50);
+    border-radius:14px;padding:14px 16px;margin-bottom:20px;line-height:1.75;
+  }
+  .form-attrib b{color:var(--green-900)}
 
   /* ---------- 追従バー ---------- */
   .sticky{
     position:fixed;left:0;right:0;bottom:0;z-index:60;
     background:rgba(255,255,255,.97);border-top:1px solid var(--line);
-    padding:10px 16px;box-shadow:0 -3px 16px rgba(9,30,66,.1);
-    transform:translateY(110%);transition:transform .25s ease;
+    padding:11px 18px;box-shadow:0 -3px 16px rgba(27,67,50,.08);
+    transform:translateY(115%);transition:transform .25s ease;
   }
   .sticky.show{transform:none}
-  .sticky .btn{max-width:560px;margin:0 auto;padding:13px}
+  .sticky .btn{max-width:560px;margin:0 auto;padding:14px}
 
-  footer{background:var(--navy);color:#9fb4c9;padding:28px 0 96px;font-size:.78rem}
-  footer a{color:#c8dcf0}
-  .thanks{display:none;text-align:center;padding:52px 0}
+  footer{background:var(--green-900);color:#b9cfc3;padding:34px 0 100px;font-size:.84rem}
+  footer a{color:#d8f0e4}
+  footer b{color:var(--white)}
+  .foot-block{margin-bottom:16px}
+  .thanks{display:none;text-align:center;padding:56px 0}
   .thanks.show{display:block}
   .thanks .id{
     font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-    background:var(--bg-soft);padding:9px 14px;border-radius:7px;
-    display:inline-block;margin-top:12px;font-size:.85rem;color:var(--navy);
+    background:var(--green-50);padding:11px 16px;border-radius:12px;
+    display:inline-block;margin-top:14px;font-size:.88rem;color:var(--green-900);
   }
-  @media(max-width:400px){ .hero h1{font-size:1.5rem} }
+  @media(max-width:400px){ .hero h1{font-size:1.58rem} body{font-size:16px} }
 </style>
 </head>
 <body>
@@ -201,23 +278,32 @@
 <!-- ══════════ 1. FV ══════════ -->
 <header class="hero">
   <div class="wrap">
-    <span class="badge">郵便番号だけ・30秒・無料</span>
-    <!-- コピー: shinri-san A案(社会的比較)。「安さ」を1文字も出さない -->
-    <h1>その回線、<span class="em">3年前の契約のまま</span>ですか？</h1>
-    <p class="lead">同じエリアの人が今選んでいる回線と、30秒で比べられます。</p>
+    <!-- TODO(必須): 社名の正式表記を確認すること。
+         「株式会社エンライフ」「株式会社enlife」等、表記ゆれを確認できていない。
+         公開ページのため、確認せずに掲載しない。 -->
+    <span class="attrib">株式会社エンライフ｜沖縄の保険代理店</span>
+
+    <!-- FVコピー B案 (shinri-san)。過失を誰にも負わせず、情報ギャップだけ開く。
+         旧A案「その回線、3年前の契約のままですか？」は §2 の見出しに降格した -->
+    <h1>この3年で、光回線の<span class="em">選択肢は変わりました</span>。</h1>
+    <p class="lead">あなたのお住まいのエリアで、今いちばん条件のいい回線を30秒でお調べします。</p>
 
     <div class="card">
       <label for="zip">お住まいの郵便番号</label>
-      <div class="zip-row">
-        <input type="text" id="zip" inputmode="numeric" autocomplete="postal-code"
-               maxlength="8" placeholder="1500001" aria-describedby="zip-err">
-      </div>
-      <!-- ボタン文言: shinri-san 本命「入力物を明示し未知の恐怖を消す」 -->
+      <input type="text" id="zip" inputmode="numeric" autocomplete="postal-code"
+             maxlength="8" placeholder="1500001" aria-describedby="zip-err">
       <button class="btn" id="btn-check" type="button">郵便番号だけで診断する（30秒）</button>
       <p class="err" id="zip-err" role="alert">郵便番号を7桁の数字でご入力ください。</p>
       <p class="note-under-btn tiny">入力は郵便番号のみ。この時点で個人情報は不要です。</p>
 
-      <!-- 診断結果: 「結果を先に見せてからフォーム」= lp-kun・shinri-san 合意（保有効果） -->
+      <!-- 安心3点の圧縮版 (lp-kun: 不安が発生する瞬間の隣に置く) -->
+      <div class="trust-mini">
+        <span>相談無料</span>
+        <span>「検討しません」で終了</span>
+        <span>エリア外もご案内</span>
+      </div>
+
+      <!-- 診断結果: 「結果を先に見せてからフォーム」= 保有効果。フォームを人質にしない -->
       <div class="result" id="result" aria-live="polite">
         <p class="result-head">診断結果</p>
         <p class="result-title" id="r-title"></p>
@@ -225,24 +311,28 @@
         <button class="btn" id="btn-to-form" type="button">この結果について話を聞いてみる</button>
       </div>
     </div>
+
+    <p class="carriers-line" id="carriers-line"></p>
   </div>
 </header>
 
-<!-- ══════════ 2. 損の可視化（訴求A1の中核） ══════════ -->
+<!-- ══════════ 2. 損の可視化（旧FV A案を見出しに降格） ══════════ -->
 <section>
   <div class="wrap">
-    <h2>「今のままでいい」の判断材料、<br>最後に見たのはいつですか。</h2>
+    <!-- shinri-san: 同じ内容でも、FVでは詰問、中盤では解説になる。位置が意味を決める -->
+    <h2>3年前と今で、何が変わったのか。</h2>
     <p class="sub">回線は契約した時点が最新で、あとは古くなる一方です。乗り換えを勧めたいのではなく、<b>今の契約が今のエリアで適正かを一度だけ確認する</b>ためのページです。</p>
 
-    <div class="tbl-scroll" style="margin:22px 0 14px">
+    <!-- lp-kun: 比較表 4行→3行。表は縦に伸びる最大要因で、4行目は大抵冗長 -->
+    <div class="tbl-scroll">
       <table>
         <thead>
-          <tr><th>確認する項目</th><th>診断でわかること</th></tr>
+          <tr><th>確認すること</th><th>診断でわかること</th></tr>
         </thead>
         <tbody>
           <tr>
-            <th>提供エリア</th>
-            <td class="hl">お住まいがNURO光の対象エリアか。対象外なら、そのエリアで選べる回線をご案内します</td>
+            <th>お住まいのエリア</th>
+            <td>その地域で選べる回線と、選択肢の広さ</td>
           </tr>
           <tr>
             <th>契約年数</th>
@@ -250,81 +340,115 @@
           </tr>
           <tr>
             <th>今の月額</th>
-            <td>同エリア・同条件での比較対象をお出しします</td>
-          </tr>
-          <tr>
-            <th>工事の要否</th>
-            <td>建物の種別によって必要な工事と期間が変わります</td>
+            <td>同じエリア・同じ条件での比較対象をお出しします</td>
           </tr>
         </tbody>
       </table>
     </div>
-    <!--
-      shinri-san レッドライン遵守:
-      「年間◯万円損しています」等の未確定の損失の断定は書かない。
-      金額は断定せず「診断で出る」に寄せる (lp-kun 構造案と一致)。
-    -->
-    <p class="tiny">※ 金額・速度は住所・建物・契約内容によって異なります。このページでは特定の金額をお約束するものではありません。</p>
+    <!-- shinri-san レッドライン: 未確定の損失を断定しない。金額は「診断で出る」に寄せる -->
+    <p class="tiny">※ 金額・速度は住所・建物・契約内容によって異なります。このページで特定の金額をお約束するものではありません。</p>
   </div>
 </section>
 
-<!-- ══════════ 3. 流れ3ステップ（「契約させられる」恐怖の解除） ══════════ -->
-<section style="background:var(--bg-soft)">
+<!-- ══════════ 3. 流れ + 安心3点（吸収） ══════════ -->
+<section class="soft">
   <div class="wrap">
     <h2>ご連絡から、判断まで</h2>
     <ol class="steps">
-      <li><b>郵便番号でエリア診断</b><span class="sub">この画面で完了します。30秒。</span></li>
-      <li><b>診断結果のご説明のお電話</b><span class="sub">結果が出ましたので、担当からすぐにご連絡します。</span></li>
-      <li><b>ご判断は、そのあとで</b><span class="sub">その場で決める必要はありません。</span></li>
+      <li>
+        <b>郵便番号でエリア診断</b>
+        <span class="sub">この画面で完了します。30秒。<b style="color:var(--green-700)">診断もご相談も無料です。</b></span>
+      </li>
+      <li>
+        <b>診断結果のご説明のお電話</b>
+        <!--
+          ⚠️ 「しつこい営業なし」「営業電話はしません」は使わないこと。
+          理由(risk-chan / shinri-san):
+           1) 「しつこい」に定義がなく実証できない＝景表法上の表示リスク
+           2) 特商法の再勧誘禁止は【守って当然の義務】であり売り文句にしない
+           3) 5分以内架電率90%のKPI・LINEステップ配信(部品3)と正面衝突する
+          → 「架電はする」と明記した上で、離脱スイッチをユーザーに渡す形にする。
+             これが検証可能・法令整合・KPI整合を同時に満たす唯一のライン。
+        -->
+        <span class="sub">結果が出ましたので、担当からすぐにご連絡します。<b style="color:var(--green-700)">合わないと感じられたら「検討しません」の一言で終了します。</b></span>
+      </li>
+      <li>
+        <b>ご判断は、そのあとで</b>
+        <span class="sub">その場で決める必要はありません。<b style="color:var(--green-700)">エリア外でも、そこで選べる回線をご案内します。</b></span>
+      </li>
     </ol>
-    <!-- 可逆性の保証 (shinri-san) -->
     <div class="callout"><b>このページで契約手続きは発生しません。</b>診断とご説明までが、私たちの役割です。</div>
   </div>
 </section>
 
-<!-- ══════════ 4. FAQ（最終の反論処理） ══════════ -->
-<section>
+<!-- ══════════ 4. 運営会社（小柳さん明示指示により独立セクション） ══════════ -->
+<section id="company">
+  <div class="wrap">
+    <!--
+      shinri-san: 畑違い感は、隠すと不信・順序を誤ると不信・正面から先に言うと信頼になる。
+      ユーザーが抱く問いをこちらから先に口に出す（self-disclosure による先制）。
+      「実績がある会社です」は数字がないので弱い。「同じ流儀で同じ構造の課題を扱っている」は強い。
+      → 畑違いを、むしろ中立性の根拠に反転させる。
+    -->
+    <p class="company-q">保険の代理店が、なぜ回線のご相談を受けるのか。</p>
+    <div class="company-body">
+      <p>私たちは沖縄で、ご家庭の保険を見直す仕事をしてきました。</p>
+      <p>家計を一つずつ拝見していくと、保険の次に「これは見直せます」とお伝えすることが多かったのが、通信費でした。毎月かかり続けるのに、契約したきりになりやすい。保険とまったく同じ構造です。</p>
+      <p>だから私たちは、回線も同じやり方で見ています。<b>売れる商品ではなく、そのご家庭に合う契約を選ぶ。</b>保険の見直しで、ずっとそうしてきました。</p>
+    </div>
+
+    <div class="company-sign">
+      <!-- TODO(必須): 正式名称・所在地・代表者名・電話番号を確認して記載すること。
+           推測で埋めてはいけない（公開ページ・特商法/景表法の表示義務に直結）。 -->
+      <b>株式会社エンライフ</b>
+      沖縄県／保険代理店<br>
+      <!-- TODO(必須): risk-chan 指摘。「約80名」は数え方（正社員のみか、業務委託・
+           パート込みか）と時点を社内で確定してから出すこと。確定できないなら削除する。
+           「約」でも数字は数字であり、実数の裏付け（在籍名簿・時点）を求められうる。 -->
+      沖縄で、約80名のスタッフが働いています。ほとんどが、地元でご家族の家計相談を担当してきた者です。
+      <p class="tiny" id="carriers-detail"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 5. FAQ（4問→3問に圧縮） ══════════ -->
+<section class="soft">
   <div class="wrap">
     <h2>よくあるご質問</h2>
     <details>
       <summary>しつこく営業されませんか？</summary>
-      <p>診断結果のご説明のため、担当よりご連絡します。「検討しません」とお伝えいただければ、そこで終了します。ご連絡を希望されない場合は、その旨をお電話で一言お伝えください。</p>
+      <p>診断結果のご説明のため、担当よりご連絡します。「検討しません」とお伝えいただければ、そこで終了します。</p>
     </details>
     <details>
       <summary>今使っている回線は、どうなりますか？</summary>
       <p>解約のタイミングや更新月は契約内容によって異なります。違約金が発生する時期であれば、その事実も含めてお伝えします。乗り換えないほうが良い場合は、そうお伝えします。</p>
     </details>
     <details>
-      <summary>工事は必要ですか？</summary>
-      <p>建物の種別と設備状況によって異なります。工事が不要なケースも、宅内工事が必要なケースもあります。診断後のご説明で確認します。</p>
-    </details>
-    <details>
-      <summary>診断に費用はかかりますか？</summary>
-      <p>かかりません。エリア判定・ご説明まで無料です。</p>
+      <summary>工事や費用はどうなりますか？</summary>
+      <p>工事の要否は建物の種別と設備状況によって異なります。診断とご相談に費用はかかりません。ご契約に進まれる場合は、初期契約解除制度についてもご契約時にご説明します。</p>
     </details>
   </div>
 </section>
 
-<!-- ══════════ 5. フォーム（3項目） ══════════ -->
-<section class="form-sec" id="form-sec">
+<!-- ══════════ 6. フォーム ══════════ -->
+<section id="form-sec">
   <div class="wrap">
     <div id="form-live">
       <h2 id="form-h2">診断結果のご連絡先</h2>
 
-      <!--
-        電話番号への抵抗を下げる一言。
-        shinri-san の折衷案を採用 = 「営業電話はしません」ではなく
-        「診断結果のご説明のため、すぐにご連絡します」。
-        理由: 前者はインサイドセールス部の5分以内架電率90%と正面衝突する。
-        守れない約束はCVRを上げてクレームで返ってくる。
-      -->
+      <!-- lp-kun: 個人情報を渡す直前が、運営者情報の需要が最大化する瞬間 -->
+      <p class="form-attrib">
+        <b>株式会社エンライフ</b>（沖縄県／保険代理店）が、家計のご相談で培ったやり方でご案内します。
+      </p>
+
+      <!-- shinri-san 折衷案（採用済み）。「営業電話はしません」は5分以内架電KPIと
+           衝突するため不採用にした経緯がある。ここを弱めないこと -->
       <div class="promise">
         <b>診断結果のご説明のため、すぐにご連絡します。</b><br>
-        ご連絡先は結果のご案内にのみ使用し、第三者への提供はありません。
+        ご連絡先は結果のご案内にのみ使用し、ご本人の同意なく第三者へ提供することはありません。
       </div>
 
       <form id="lead-form" novalidate>
-        <!-- 郵便番号: 診断からプリフィル。「3項目のうち1つは埋まっている」完了間近の錯覚 (lp-kun) -->
         <div class="field">
           <label for="f-zip">郵便番号 <span class="opt">診断済み</span></label>
           <input type="text" id="f-zip" name="zip" readonly>
@@ -351,6 +475,8 @@
           </div>
           <div id="pane-line" hidden>
             <p class="micro" style="margin:0 0 10px">
+              <!-- TODO(必須): LINE友だち追加の案内画面がまだ存在しない（部品3と接続が必要）。
+                   この文言は、案内画面ができるまで実態と一致しない -->
               LINEをご希望の場合、送信後に友だち追加のご案内を表示します。お電話でのご連絡はいたしません。
             </p>
           </div>
@@ -358,7 +484,7 @@
 
         <button class="btn" type="submit" id="btn-submit">診断結果の説明を受ける</button>
         <p class="err" id="submit-err"></p>
-        <p class="tiny" style="margin-top:14px">
+        <p class="tiny" style="margin-top:16px">
           送信により<a href="#privacy">個人情報の取扱い</a>に同意いただいたものとします。
         </p>
       </form>
@@ -374,18 +500,27 @@
 
 <footer>
   <div class="wrap">
-    <p id="privacy" style="margin-bottom:8px"><b style="color:#fff">個人情報の取扱い</b></p>
-    <p class="tiny" style="color:#9fb4c9">
-      <!-- TODO(必須): 運営者名・所在地・問い合わせ先・プライバシーポリシーのURLを記載する。
-           特定商取引法・個人情報保護法の表示義務があり、
-           未記載のままではMeta/Googleの広告審査に通らない (risk-chan 領域) -->
-      ［TODO(必須)：運営者名 / 所在地 / 問い合わせ先 / プライバシーポリシーURL を記載］<br>
+    <div class="foot-block">
+      <b>株式会社エンライフ</b><br>
+      <!-- TODO(必須): risk-chan 指摘・広告審査の必須項目。
+           所在地／代表者名／電話番号／受付時間を確認して記載すること。
+           未記載ではMeta/Googleの審査に通らない。推測で埋めないこと。 -->
+      ［TODO(必須)：所在地 / 代表者名 / 電話番号 / 受付時間 を記載］
+    </div>
+    <div class="foot-block" id="privacy">
+      <b>個人情報の取扱い</b><br>
+      <!-- TODO(必須): プライバシーポリシーを作成し、ここからリンクすること。
+           risk-chan 指摘・記載必須の項目:
+            - 取得目的（回線の提案・架電）
+            - 第三者提供の有無（エリア外リードを提携先へ渡すなら明記必須）
+            - 委託の有無 / 開示請求窓口 -->
+      ［TODO(必須)：プライバシーポリシーを作成しリンクする］<br>
       お預かりした情報は、回線診断結果のご案内および関連するご連絡にのみ使用します。
-    </p>
+    </div>
+    <p class="tiny" id="foot-trademark"></p>
   </div>
 </footer>
 
-<!-- 追従バー: FV離脱後に常時表示。診断中・フォーム入力中は自動で隠す (lp-kun) -->
 <div class="sticky" id="sticky">
   <button class="btn" type="button" id="btn-sticky">郵便番号だけで30秒診断</button>
 </div>
@@ -397,38 +532,75 @@
 /* ══════════════════════════════════════════════════════════
    TODO(必須): Power Automate「HTTP 要求の受信時」トリガーのURL。
    未設定の間はリードが1件も届かない（送信は中止され、偽の完了画面は出さない）。
-
-   ■ 取得手順・フロー設計は docs/power-automate-lead-flow.md（hikari-hq）参照
-   ■ 前提: HTTPトリガーは【プレミアム】扱い。Free/Microsoft365同梱ライセンスでは
-     使用不可（standard connectors のみ）。Power Automate Premium が必要。
-   ■ CORS: 2026-07-17 実測で、Logic Apps/Power Automate 共通ゲートウェイは
-     プリフライト(OPTIONS)に 200 + Access-Control-Allow-Origin: * を返す。
-     カスタムヘッダーもエコーバックされるため、通常の fetch + JSON で呼べる。
-     （「HTTPトリガーはCORSで呼べない」という通説は現時点では誤り）
-
-   ⚠️ このURLは秘匿できない。
-     トリガーURLはクエリに SAS 署名(sig=)を含み、URLを知る者は誰でも実行できる。
-     本ファイルは公開リポジトリ(hikari-lp)にあるため、URLは実質【公開】される。
-     これは Power Automate の仕様であり、フロント側では回避不能。
-     → 悪用時は SASキーを再生成し、本ファイルのURLを差し替えて再デプロイする。
-     → フロー側での多層防御（スキーマ検証・重複排除・流量監視）が前提。
-        設計書の「フロー側の責務」を必ず実装すること。
+   フロー設計は hikari-hq の docs/power-automate-lead-flow.md 参照。
+   HTTPトリガーは【プレミアム】扱い。Free/M365同梱ライセンスでは使用不可。
+   ⚠️ このURLは秘匿できない（SAS署名を含み、URLを知る者は誰でも実行可能）。
+      本ファイルは公開リポジトリにあるため実質公開される。仕様であり回避不能。
+      悪用時はSASキーを再生成し、ここを差し替えて再デプロイする。
    ══════════════════════════════════════════════════════════ */
-var FORM_ENDPOINT = "";   // 例: "https://prod-XX.japaneast.logic.azure.com:443/workflows/.../invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=..."
+var FORM_ENDPOINT = "";
+var SHARED_SECRET = "";        // 任意。x-lp-key で送出。JSに書く以上ボット除け以上にはならない
+var SUBMIT_TIMEOUT_MS = 15000;
 
-/* ボット除け。JSに書く以上、決定的な防御にはならない（一緒に漏れる）。
-   無差別スクリプトを弾く程度の効果しかないことを承知のうえで使う。
-   本命の防御はフロー側のスキーマ検証・重複排除・流量監視。 */
-var SHARED_SECRET = "";   // 任意。設定時は x-lp-key ヘッダーで送出し、フロー側で照合する
+var LP_ID = "A1D1";
 
-var SUBMIT_TIMEOUT_MS = 15000;   // 同期応答の上限は120秒だが、UX上15秒で打ち切る
+/* ══════════════════════════════════════════════════════════
+   ブランド名（NURO光・ソフトバンク光・ドコモ光）の表示スイッチ
+   ──────────────────────────────────────────────────────────
+   ⚠️ 現在 false。契約状況が確認できるまでブランド名を一切出さない。
 
-var LP_ID = "A1D1";       // ab-chan: LP識別はURLパスとこの定数。utm_content には載せない
+   risk-chan の指摘（配信を止めるレベル）:
+   1) 代理店契約が無い状態で「〇〇光に対応」と書くと、役務の内容について
+      実際のものより著しく優良と誤認させる表示（優良誤認）にあたりうる。
+      ロゴを使わずテキストのみでも安全にならない。
+   2) Google広告の商標ポリシーは、再販業者による商標使用にLP側の要件を課す。
+      「購入方法を明確に示し、料金・価格などの商業上の情報を表示」し、
+      「再販業者または情報サイトの運営者であることを広告とLP内で明示」が必要。
+      本LPは価格情報を一切出していないため、どちらの要件も満たさない。
+   3) 最悪の点: 申し立てが通ると、制限は【セカンドレベルドメイン単位】で
+      継続適用される。allgroup-inc.github.io は共有ドメインのため、
+      他のLPも巻き添えになる。
+   4) Metaは商標について再販業者例外を明文化しておらず、権利者の申し立て
+      ドリブンでアカウント制限に至る。アカウント停止は事業停止と同義。
+
+   ■ true にしてよい条件（すべて満たすこと）
+     - 各社（またはその一次代理店）との契約が現に存在する
+     - 契約上、その表記が許諾されている（「正規代理店」と名乗れるか等）
+     - Googleの商標ポリシー要件（価格等の商業情報・再販業者である旨の明示）
+       をLPに実装済み
+     - 弁護士の確認を得ている
+   ══════════════════════════════════════════════════════════ */
+var SHOW_BRAND_NAMES = false;
+
+/* ブランド名に依存する文言はすべてここに集約する。
+   SHOW_BRAND_NAMES を true にすれば一括で切り替わる（本文を直接書き換えないこと）。 */
+var COPY = SHOW_BRAND_NAMES ? {
+  carriersLine:   "NURO光・ソフトバンク光・ドコモ光など、主要な光回線から診断します。",
+  carriersDetail: "NURO光、ソフトバンク光、ドコモ光など、主要な光回線に対応しています。特定の1社だけをおすすめすることはしません。お住まいの住所で実際に使える回線を並べ、料金と速度を比べたうえでご説明します。選ぶのはお客様です。",
+  trademark:      "※ 記載の各サービス名称は、各社の商標または登録商標です。",
+  areaInTitle:    "お住まいの地域は、NURO光の提供対象エリアに含まれています。",
+  areaInBody:     "同じ地域でも、建物の設備状況によってご利用いただけない場合があります。実際に使えるかどうかと、今の契約との比較を、担当が確認してご連絡します。",
+  areaOutTitle:   "は、NURO光の対象外でした。",
+  areaOutBody:    "ただし、このエリアで選べる回線は他にあります。今の契約と比べて条件が良いものを、担当からご説明します。",
+  plan10g:        "（お住まいの地域は10ギガプランが対象です）"
+} : {
+  /* ブランド名を伏せた版。事実として言えることだけを書いている。
+     「選択肢が多い/限られる」は、対象エリア内では選べる回線が1つ多い、
+     という事実に基づく表現であり、特定商品の提供可否を断定していない。 */
+  carriersLine:   "光回線・ホームルーターなど、複数の選択肢からお住まいに合うものをご案内します。",
+  carriersDetail: "特定の1社だけをおすすめすることはしません。お住まいの住所で実際に使える回線を並べ、料金と速度を比べたうえでご説明します。選ぶのはお客様です。",
+  trademark:      "",
+  areaInTitle:    "お住まいの地域は、選べる回線の選択肢が多いエリアです。",
+  areaInBody:     "ただし、同じ地域でも建物の設備状況によってご利用いただけない場合があります。実際に使える回線と、今の契約との比較を、担当が確認してご連絡します。",
+  areaOutTitle:   "は、選べる回線が限られるエリアです。",
+  areaOutBody:    "その中から、今の契約と比べて条件の良いものをお調べしてご案内します。「対象外でした」で終わらせません。",
+  plan10g:        ""
+};
 
 /* ══════════════════════════════════════════════════════════
    エリア判定：都道府県レベルの【陰性フィルタ】
    ──────────────────────────────────────────────────────────
-   ■ この実装の根拠と限界（改修時は必ず読むこと）
+   ■ 根拠と限界（改修時は必ず読むこと）
 
    NURO公式(nuro.jp)には、郵便番号・市区町村レベルの提供エリア一覧が
    【存在しない】。公式のエリア判定は郵便番号→住所→【番地の選択まで必須】の
@@ -443,9 +615,8 @@ var LP_ID = "A1D1";       // ab-chan: LP識別はURLパスとこの定数。utm_
      断定することは【原理的に不可能】。
 
    ■ よって本実装は「提供可否の判定」をしない。確実に言えるのは陰性だけ：
-     - 対象24都道府県の【外】 → 「提供対象外」と断定してよい
+     - 対象24都道府県の【外】 → 断定してよい（選べる回線が限られる）
      - 対象24都道府県の【内】 → 「可能性がある」までしか言えない
-       （UI文言も断定を避けている。runCheck() の result 表示部を参照）
      - 判定不能（未知の番号） → 「可能性がある」側に寄せ、有人確認へ回す
 
    ■ 出典（2026-07-17 に nuro.jp トップページで直接確認）
@@ -478,31 +649,36 @@ var PREF_RANGES = [
 ];
 var NURO_2G = ["北海道","東京","神奈川","埼玉","千葉","茨城","栃木","群馬","愛知","静岡",
                "岐阜","三重","大阪","兵庫","京都","滋賀","奈良","広島","岡山","福岡","佐賀"];
-var NURO_10G_ONLY = ["宮城","福島","山形"];   // 10ギガのみ提供
+var NURO_10G_ONLY = ["宮城","福島","山形"];
 
 function prefOf(prefix3){
   var n = parseInt(prefix3, 10);
   for(var i=0;i<PREF_RANGES.length;i++){
     if(n >= PREF_RANGES[i][1] && n <= PREF_RANGES[i][2]) return PREF_RANGES[i][0];
   }
-  return "";   // 未知 → グレー扱い
+  return "";
 }
 
-/* ---------- 計測 ---------- */
+/* ---------- 計測 ----------
+   ⚠️ 判定指標は form_start率の【1本のみ】（ab-chan・事前登録）。
+      12指標をα=0.05で全部見ると、偽陽性が1つ以上出る確率は 1-0.95^12 = 46%。
+      残りは説明用であって、勝敗宣言に使わないこと。
+   ⚠️ scroll_50/scroll_90 は廃止した（ab-chan）。セクション構成が変わると
+      同じ「90%」が指す場所が変わり、フェーズ間で比較不能になるため、
+      セクション到達イベントに一本化している。
+------------------------- */
 window.dataLayer = window.dataLayer || [];
 function track(name, params){
   var payload = Object.assign({event:name, lp_id:LP_ID, session_id:SESSION_ID}, CTX, params||{});
   window.dataLayer.push(payload);
   // TODO(必須): GA4 / Meta Pixel の実装をここに接続する
-  // if(window.gtag) gtag('event', name, payload);
-  // if(window.fbq)  fbq('trackCustom', name, payload);
   if(window.console && console.debug) console.debug('[track]', name, payload);
 }
 
 /* ---------- ID ----------
    エルくん裁定: lp-kun(読込時発番) と ab-chan(送信時発番) の対立を分離して解決。
-   - session_id : 読込時に発番。途中離脱者の追跡＝部品3のLINE追客に接続 (lp-kun の要件)
-   - lead_id    : 送信時に発番。未送信IDが分母を壊すのを防ぐ (ab-chan の要件・設計書とも一致)
+   - session_id : 読込時に発番。途中離脱者の追跡＝部品3のLINE追客に接続
+   - lead_id    : 送信時に発番。未送信IDが分母を壊すのを防ぐ（設計書とも一致）
 ------------------------- */
 function rand8(){
   var c="0123456789ABCDEFGHJKMNPQRSTVWXYZ", o="";
@@ -518,9 +694,7 @@ function today(){
 var SESSION_ID = sessionStorage.getItem("hk_sid") || ("S-"+today()+"-"+rand8());
 sessionStorage.setItem("hk_sid", SESSION_ID);
 
-/* ---------- UTM / 流入コンテキスト ----------
-   ab-chan: ページ内遷移で消えるのが最頻出の計測事故 → sessionStorage に保持し hidden へ全展開
-------------------------- */
+/* ---------- UTM / 流入コンテキスト ---------- */
 var CTX = (function(){
   var saved = sessionStorage.getItem("hk_ctx");
   if(saved){ try{ return JSON.parse(saved); }catch(e){} }
@@ -560,21 +734,42 @@ var planScope  = "";   // "2g_10g" | "10g_only"
 var contactType = "tel";
 var submitting = false;
 
-/* ---------- 1. page_view ---------- */
+/* ---------- ブランド依存コピーの注入 ---------- */
+$("carriers-line").textContent   = COPY.carriersLine;
+$("carriers-detail").textContent = COPY.carriersDetail;
+$("foot-trademark").textContent  = COPY.trademark;
+
+/* ---------- page_view ---------- */
 track("page_view");
 
-/* ---------- 2. scroll_50 / scroll_90 ---------- */
-var fired = {};
-function onScroll(){
-  var h = document.documentElement.scrollHeight - window.innerHeight;
-  if(h <= 0) return;
-  var pct = (window.scrollY / h) * 100;
-  if(pct >= 50 && !fired.s50){ fired.s50=1; track("scroll_50"); }
-  if(pct >= 90 && !fired.s90){ fired.s90=1; track("scroll_90"); }
-}
-window.addEventListener("scroll", onScroll, {passive:true});
+/* ---------- セクション到達（ab-chan: scroll_%を置き換え） ---------- */
+(function(){
+  if(!("IntersectionObserver" in window)) return;
+  var targets = [
+    {el: $("company"),        name: "section_view_company"},
+    {el: document.querySelector(".steps"), name: "section_view_trust"},
+    {el: $("carriers-detail"), name: "section_view_carriers"}
+  ];
+  var timers = {};
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var t = targets.filter(function(x){ return x.el === e.target; })[0];
+      if(!t) return;
+      if(e.isIntersecting){
+        // 可視50%・1秒滞在で1回発火（ab-chan）
+        timers[t.name] = setTimeout(function(){
+          track(t.name);
+          io.unobserve(t.el);
+        }, 1000);
+      }else{
+        clearTimeout(timers[t.name]);
+      }
+    });
+  }, {threshold: 0.5});
+  targets.forEach(function(t){ if(t.el) io.observe(t.el); });
+})();
 
-/* ---------- 9. time_15s / time_60s ---------- */
+/* ---------- 滞在 ---------- */
 setTimeout(function(){ track("time_15s"); }, 15000);
 setTimeout(function(){ track("time_60s"); }, 60000);
 
@@ -594,7 +789,7 @@ zip.addEventListener("input", function(){
   zipErr.style.display = "none";
 });
 
-/* ---------- 6. area_check ---------- */
+/* ---------- area_check ---------- */
 function runCheck(){
   var digits = zip.value.replace(/[^0-9]/g,"");
   if(digits.length !== 7){
@@ -621,25 +816,22 @@ function runCheck(){
   });
 
   if(areaStatus === "maybe"){
-    /* ⚠️ 「対象エリアです」と断定しないこと。
+    /* ⚠️ 「提供可能です」と断定しないこと。
        同一郵便番号内でも建物単位で提供可否が分かれるため、
-       断定は誤誘導（実害）になる。文言を変更する場合は
-       AREA判定ブロック冒頭のコメントを必ず読むこと。 */
-    rTitle.textContent = "お住まいの地域は、NURO光の提供対象エリアに含まれています。";
+       断定は誤誘導（実害）になる。文言を変える場合は
+       エリア判定ブロック冒頭のコメントを必ず読むこと。 */
+    rTitle.textContent = COPY.areaInTitle;
     rTitle.className = "result-title in";
-    rBody.textContent = "同じ地域でも、建物の設備状況によってご利用いただけない場合があります。"
-      + "実際に使えるかどうかと、今の契約との比較を、担当が確認してご連絡します。"
-      + (is10G ? "（お住まいの地域は10ギガプランが対象です）" : "");
+    rBody.textContent = COPY.areaInBody + (is10G ? COPY.plan10g : "");
     btnToForm.textContent = "使えるかどうか確認してもらう";
   }else{
     /* エリア外分岐 (shinri-san):
        「残念ですが」は使わない。感情を確定させてしまうため。
        否定 → 即座に肯定を接続し、「診断は成立した」体裁を保つ (lp-kun)。
        別ドメインへ飛ばさず同一ページ内でフォームに繋ぐ。 */
-    rTitle.textContent = (pref ? pref : "お住まいのエリア") + "は、NURO光の対象外でした。";
+    rTitle.textContent = (pref ? pref : "お住まいのエリア") + COPY.areaOutTitle;
     rTitle.className = "result-title out";
-    rBody.textContent = "ただし、このエリアで選べる回線は他にあります。"
-      + "今の契約と比べて条件が良いものを、担当からご説明します。";
+    rBody.textContent = COPY.areaOutBody;
     btnToForm.textContent = "このエリアで選べる回線を聞いてみる";
   }
   result.classList.add("show");
@@ -675,7 +867,7 @@ function setContact(t){
 tabTel.addEventListener("click", function(){ setContact("tel"); });
 tabLine.addEventListener("click", function(){ setContact("line"); });
 
-/* ---------- 4. form_start (Phase 2 の主要判定指標) ---------- */
+/* ---------- form_start（Phase 2 の唯一の判定指標） ---------- */
 var formStarted = false;
 form.addEventListener("focusin", function(){
   if(formStarted) return;
@@ -684,7 +876,7 @@ form.addEventListener("focusin", function(){
 }, true);
 form.addEventListener("focusin", function(){ sticky.classList.remove("show"); });
 
-/* ---------- 7/8. form_submit → lead_created ---------- */
+/* ---------- form_submit → lead_created ---------- */
 function showErr(el, on){ el.style.display = on ? "block" : "none"; }
 
 form.addEventListener("submit", function(e){
@@ -710,10 +902,9 @@ form.addEventListener("submit", function(e){
   }
   if(!ok) return;
 
-  // lead_id は【送信時】に発番 (ab-chan / 設計書)
   var leadId = "HK-" + today() + "-" + LP_ID + "-" + rand8();
 
-  // Power Automate 側のスキーマ（設計書 §3）と1対1で対応。キー名を変える場合は両方直すこと
+  // Power Automate 側のスキーマ（設計書 §3）と1対1で対応。変える場合は両方直すこと
   var payload = Object.assign({
     lead_id:      leadId,        // フロー側の冪等キー。同一IDの再POSTは無視させる
     session_id:   SESSION_ID,
@@ -723,7 +914,7 @@ form.addEventListener("submit", function(e){
     contact_type: contactType,
     tel:          contactType === "tel" ? tel : "",
     area_status:  areaStatus,    // "maybe" | "out" ("out" は受け皿商材へ送客分岐させるキー)
-    plan_scope:   planScope,     // "2g_10g" | "10g_only"
+    plan_scope:   planScope,
     submitted_at: new Date().toISOString()
   }, CTX);
 
@@ -767,7 +958,7 @@ form.addEventListener("submit", function(e){
     if(!(res.status === 200 || res.status === 201 || res.status === 202)){
       throw new Error("http_" + res.status);
     }
-    // 8. lead_created = 真の分子。client の form_submit と必ず差分検証する (ab-chan)
+    // lead_created = 真の分子。client の form_submit と必ず差分検証する (ab-chan)
     track("lead_created", {lead_id: leadId, area_status: areaStatus});
     $("thanks-id").textContent = "受付番号：" + leadId;
     formLive.style.display = "none";
