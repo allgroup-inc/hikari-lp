@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>30秒の固定費チェック｜家計の見直しやさん</title>
+<meta name="description" content="毎月なんとなく払い続けている固定費、ありませんか？4つの質問と郵便番号だけで、見直し効果が出やすい通信費をチェックします。ご相談は無料。このページで契約手続きはありません。">
+<meta name="robots" content="noindex, nofollow">
+<!--
+  ============================================================================
+  LP ID : a2  （訴求A2: 家計診断型 × Meta潜在層向け）
+  位置づけ: 設問別の回答・離脱を計測し週次でLP改善する【本命LP】
+  設計根拠: hikari-hq docs/チャット引き継ぎ書.md(2026-07-23) / docs/計測イベント設計.md
+  ---------------------------------------------------------------------------
+  ■ 配色（チャット側エルくん組織の裁定・2026-07-23引き継ぎ）
+    - ネイビー基調 + 青CTA + 黄は差し色（NURO模倣回避の裁定済み）
+    - CTA #0B57D0 × 白文字 ≒ 4.6:1（AA可）。ネイビー #12233B は本文/見出し
+    - 黄 #FCD533 はアクセント面のみ（進捗バー・マーカー・番号）。文字は必ず黒で乗せる
+    - ※ a1d1(公開済)はゴールド基調のまま凍結。本LPから新裁定を適用
+  ■ 診断の誠実性（risk-chan ガード・a1d1から継承）
+    - 「家計全体を診断する」と装わない。FVで【固定費の中でも通信費を中心に見る】と明示
+    - 結果画面は「見直しサイン」の個数提示のみ。金額・削減額を約束しない
+    - エリア判定は都道府県レベルの陰性フィルタ。「提供可能」と断定しない
+    - ブランド名(NURO光等)は代理店契約確認まで非表示（SHOW_BRAND_NAMES=false）
+    - 実績事例は a1d1 と同一ソース・同一打消し表示（根拠保全TODOも同一）
+  ■ 計測（docs/計測イベント設計.md 準拠・本LPの存在意義）
+    - diagnosis_start / q_view / q_answer / q_back / diagnosis_result を全設問で発火
+    - GA4_ID / CLARITY_ID 未設定の間はタグを読み込まない（挙動は素のLP）
+    - フォーム入力値・自由記述は計測に載せない。フォームは data-clarity-mask
+  ■ TODO(必須) で検索すること。配信前に潰す。
+  ============================================================================
+-->
+<style>
+  :root{
+    --navy:#12233B;         /* 基調ネイビー（本文・見出し・フッター地） */
+    --navy-deep:#0E1C30;
+    --cta:#0B57D0;          /* 青CTA。白文字4.6:1 */
+    --cta-dark:#0A4AAE;
+    --accent:#FCD533;       /* 黄は差し色のみ。文字は必ず黒 */
+    --accent-soft:#FEF6D6;
+    --ink:#12233B;
+    --note:#3d4a5e;
+    --sub:#5a6778;
+    --bg:#F6F9FD;           /* 淡い青白 */
+    --white:#ffffff;
+    --line:#dde6f2;
+    --r:22px; --r-sm:14px; --r-pill:999px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",Meiryo,sans-serif;
+    color:var(--ink); background:var(--bg);
+    font-size:17px; line-height:1.95; -webkit-text-size-adjust:100%;
+  }
+  .wrap{max-width:600px;margin:0 auto;padding:0 22px}
+  section{padding:52px 0}
+  h2{font-size:1.4rem;line-height:1.6;margin-bottom:8px;letter-spacing:.01em}
+  .lead{color:var(--sub);font-size:.98rem;margin-bottom:26px}
+  p{margin-bottom:15px}
+  .tiny{font-size:.82rem;color:var(--sub);line-height:1.75}
+  .note{font-size:.84rem;color:var(--note);line-height:1.8}
+  .soft{background:#EDF3FB}
+
+  .site-header{
+    position:sticky;top:0;z-index:70;
+    background:rgba(246,249,253,.96);backdrop-filter:saturate(1.1) blur(6px);
+    border-bottom:3px solid var(--navy);
+  }
+  .site-header .bar{max-width:600px;margin:0 auto;padding:8px 22px;display:flex;align-items:center;gap:10px}
+  .site-header img{height:44px;width:44px;border-radius:50%;display:block}
+  .site-header .name{font-weight:700;font-size:1.02rem;letter-spacing:.02em}
+  .site-header .name small{display:block;font-weight:400;font-size:.68rem;color:var(--sub);letter-spacing:.04em}
+
+  .hero{background:linear-gradient(180deg,#E4EDF9 0%, var(--bg) 78%);padding:34px 0 44px}
+  .hero .pill{
+    display:inline-block;background:var(--white);border:2px solid var(--navy);
+    font-size:.78rem;font-weight:700;padding:6px 15px;border-radius:var(--r-pill);margin-bottom:20px;
+  }
+  .hero h1{font-size:1.94rem;line-height:1.5;font-weight:700;margin-bottom:16px;letter-spacing:.01em}
+  .hero h1 .em{background:linear-gradient(transparent 58%, var(--accent) 58%);padding:0 .1em}
+  .hero .sub{color:var(--sub);font-size:1rem;margin-bottom:28px}
+
+  .card{
+    background:var(--white);border:1px solid var(--line);border-radius:var(--r);
+    padding:26px 22px;box-shadow:0 10px 30px rgba(18,35,59,.10);
+  }
+  .btn{
+    display:block;width:100%;border:none;cursor:pointer;
+    background:var(--cta);color:var(--white);
+    font-size:1.12rem;font-weight:700;font-family:inherit;
+    padding:18px 16px;border-radius:var(--r-pill);
+    box-shadow:0 5px 16px rgba(11,87,208,.28);letter-spacing:.02em;
+    transition:background .15s,transform .08s;
+  }
+  .btn:hover{background:var(--cta-dark)}
+  .btn:active{transform:translateY(1px)}
+  .btn:disabled{opacity:.55;cursor:not-allowed;box-shadow:none}
+  .err{color:#b3401a;font-size:.86rem;margin-top:9px;display:none;font-weight:700}
+  .trust-mini{
+    display:flex;flex-wrap:wrap;gap:7px 9px;justify-content:center;margin-top:18px;
+    font-size:.8rem;font-weight:700;
+  }
+  .trust-mini span{background:var(--white);border:1px solid var(--line);border-radius:var(--r-pill);padding:6px 13px}
+
+  /* ---------- 診断ステップ ---------- */
+  .diag{display:none}
+  .diag.show{display:block;animation:fade .3s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .progress{height:8px;background:var(--line);border-radius:var(--r-pill);margin-bottom:22px;overflow:hidden}
+  .progress i{display:block;height:100%;background:var(--accent);border-radius:var(--r-pill);transition:width .3s ease}
+  .q-no{font-size:.75rem;letter-spacing:.12em;color:var(--sub);font-weight:700;margin-bottom:6px}
+  .q-title{font-size:1.22rem;font-weight:700;line-height:1.6;margin-bottom:18px}
+  .opts{display:grid;gap:10px}
+  .opt{
+    text-align:left;padding:15px 18px;border:2px solid var(--line);border-radius:var(--r-sm);
+    cursor:pointer;font-size:1rem;font-weight:700;background:var(--white);color:var(--ink);
+    font-family:inherit;transition:border-color .12s,background .12s;
+  }
+  .opt:hover{border-color:var(--cta)}
+  .opt[aria-pressed=true]{border-color:var(--cta);background:#EAF1FC;color:var(--cta)}
+  .q-back{
+    display:inline-block;margin-top:16px;background:none;border:none;cursor:pointer;
+    color:var(--sub);font-size:.88rem;font-family:inherit;text-decoration:underline;padding:4px;
+  }
+  .card input[type=text]{
+    width:100%;font-size:1.38rem;letter-spacing:.16em;text-align:center;
+    padding:17px 12px;border:2px solid var(--line);border-radius:var(--r-sm);
+    font-family:inherit;background:var(--bg);color:var(--ink);
+  }
+  .card input[type=text]:focus{outline:none;border-color:var(--cta);background:var(--white)}
+  .card .btn{margin-top:16px}
+  .note-under-btn{margin-top:12px;text-align:center}
+
+  /* ---------- 結果 ---------- */
+  .signs{display:flex;gap:8px;justify-content:center;margin:14px 0 18px}
+  .sign{
+    width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-size:1.3rem;background:var(--line);
+  }
+  .sign.on{background:var(--accent)}   /* 黄地に絵文字/黒 */
+  .result-title{font-size:1.18rem;font-weight:700;line-height:1.6;margin-bottom:12px;text-align:center}
+  .result-body{font-size:.94rem;color:var(--sub);margin-bottom:18px}
+
+  /* ---------- 実績事例（a1d1と同一ソース） ---------- */
+  .cases{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:22px 0 14px}
+  .case{
+    background:var(--white);border:1px solid var(--line);border-top:4px solid var(--accent);
+    border-radius:var(--r-sm);padding:16px 14px;
+  }
+  .case .who{font-size:.82rem;color:var(--sub);font-weight:700;margin-bottom:8px}
+  .case .amt{font-size:.96rem;font-weight:700;line-height:1.5}
+  .case .amt .before{color:var(--sub);text-decoration:line-through;font-weight:400}
+  .case .amt .arrow{color:var(--cta);margin:0 4px}
+  .case .save{margin-top:6px;font-size:.82rem;color:var(--cta);font-weight:700}
+
+  .flow{list-style:none;counter-reset:f}
+  .flow li{counter-increment:f;position:relative;padding-left:56px;margin-bottom:22px}
+  .flow li::before{
+    content:counter(f);position:absolute;left:0;top:0;
+    width:40px;height:40px;border-radius:50%;
+    background:var(--accent);color:#12233B;   /* 黄地に黒=可読 */
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.05rem;
+  }
+  .flow b{display:block;font-size:1.04rem}
+  .flow span{font-size:.92rem;color:var(--sub)}
+  .callout{
+    background:var(--white);border:1px solid var(--line);border-left:5px solid var(--accent);
+    padding:16px 18px;border-radius:0 var(--r-sm) var(--r-sm) 0;font-size:.94rem;margin-top:22px;
+  }
+
+  .company-q{font-size:1.28rem;font-weight:700;line-height:1.6;margin-bottom:18px}
+  .company-body p{font-size:.98rem}
+  .company-sign{
+    margin-top:22px;padding:18px 20px;background:var(--white);
+    border:1px solid var(--line);border-radius:var(--r-sm);font-size:.92rem;
+  }
+  .company-sign b{font-size:1.02rem;display:block;margin-bottom:4px}
+
+  details{border-bottom:1px solid var(--line);padding:16px 0}
+  summary{cursor:pointer;font-weight:700;font-size:.98rem;list-style:none;position:relative;padding-right:30px;line-height:1.6}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";position:absolute;right:2px;top:-3px;font-size:1.4rem;color:var(--cta);font-weight:400}
+  details[open] summary::after{content:"–"}
+  details p{margin:12px 0 0;font-size:.92rem;color:var(--sub)}
+
+  .field{margin-bottom:22px}
+  .field label{display:block;font-weight:700;font-size:.96rem;margin-bottom:9px}
+  .field input[type=text],.field input[type=tel]{
+    width:100%;font-size:1.06rem;padding:15px 14px;border:2px solid var(--line);
+    border-radius:var(--r-sm);font-family:inherit;background:var(--white);
+  }
+  .field input:focus{outline:none;border-color:var(--cta)}
+  .field input[readonly]{background:#EDF3FB;color:var(--sub)}
+  .micro{font-size:.82rem;color:var(--sub);margin-top:8px;line-height:1.7}
+  .tabs{display:flex;gap:10px;margin-bottom:12px}
+  .tab{
+    flex:1;text-align:center;padding:13px;border:2px solid var(--line);border-radius:var(--r-pill);
+    cursor:pointer;font-size:.95rem;font-weight:700;background:var(--white);color:var(--sub);font-family:inherit;
+  }
+  .tab[aria-selected=true]{border-color:var(--cta);background:#EAF1FC;color:var(--cta)}
+  .promise{background:var(--white);border:1px solid var(--line);border-radius:var(--r-sm);padding:16px 18px;margin-bottom:22px;font-size:.94rem}
+  .form-attrib{font-size:.86rem;color:var(--sub);line-height:1.75;margin-bottom:20px}
+
+  .sticky{
+    position:fixed;left:0;right:0;bottom:0;z-index:60;
+    background:rgba(246,249,253,.97);border-top:1px solid var(--line);
+    padding:11px 18px;box-shadow:0 -3px 16px rgba(18,35,59,.12);
+    transform:translateY(120%);transition:transform .25s ease;
+  }
+  .sticky.show{transform:none}
+  .sticky .btn{max-width:560px;margin:0 auto;padding:14px}
+
+  footer{background:var(--navy-deep);color:#b9c3d4;padding:32px 0 100px;font-size:.85rem}
+  footer a{color:var(--accent)}
+  footer b{color:var(--white)}
+  .foot-block{margin-bottom:14px}
+  .thanks{display:none;text-align:center;padding:56px 0}
+  .thanks.show{display:block}
+  .thanks .id{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#EDF3FB;padding:11px 16px;border-radius:12px;display:inline-block;margin-top:14px;font-size:.88rem}
+  @media(max-width:400px){ .hero h1{font-size:1.7rem} body{font-size:16px} }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <img src="../a1d1/assets/kakei-logo@2x.png" width="44" height="44" alt="家計の見直しやさん">
+    <span class="name">家計の見直しやさん<small>固定費の見直し相談</small></span>
+  </div>
+</header>
+
+<!-- ══════════ 1. FV ══════════ -->
+<section class="hero">
+  <div class="wrap">
+    <span class="pill">質問4つ＋郵便番号・30秒・ご相談無料</span>
+    <h1>毎月の固定費、<br><span class="em">なんとなく</span>払っていませんか？</h1>
+    <!-- 誠実性ガード: 家計全体を診断すると装わず、通信費中心であることをFVで明示 -->
+    <p class="sub">この30秒チェックでは、固定費の中でも見直し効果が出やすい<b>通信費（ネット代）</b>を中心に、見直しのサインがあるかを確認します。</p>
+
+    <div class="card" id="diag-card">
+
+      <!-- STEP0: 開始 -->
+      <div class="diag show" id="step-intro">
+        <button class="btn" id="btn-start" type="button">30秒チェックをはじめる（無料）</button>
+        <p class="note-under-btn tiny">選ぶだけ・入力は最後の郵便番号のみ。この時点で個人情報は不要です。</p>
+        <div class="trust-mini">
+          <span>ご相談無料</span>
+          <span>「検討します」で終了OK</span>
+          <span>エリア外もご案内</span>
+        </div>
+      </div>
+
+      <!-- STEP1〜4: 設問（JSで描画） -->
+      <div class="diag" id="step-q">
+        <div class="progress"><i id="prog"></i></div>
+        <p class="q-no" id="q-no"></p>
+        <p class="q-title" id="q-title"></p>
+        <div class="opts" id="q-opts"></div>
+        <button class="q-back" id="q-back" type="button">← ひとつ前にもどる</button>
+      </div>
+
+      <!-- STEP5: 郵便番号 -->
+      <div class="diag" id="step-zip">
+        <div class="progress"><i style="width:90%"></i></div>
+        <p class="q-no" id="zip-no"></p>
+        <p class="q-title">最後に、お住まいの郵便番号を教えてください。</p>
+        <p class="tiny" style="margin-bottom:14px">お住まいのエリアで選べる回線の状況を確認します。</p>
+        <input type="text" id="zip" inputmode="numeric" autocomplete="postal-code"
+               maxlength="8" placeholder="1500001" aria-describedby="zip-err">
+        <button class="btn" id="btn-check" type="button">チェック結果を見る</button>
+        <p class="err" id="zip-err" role="alert">郵便番号を7桁の数字でご入力ください。</p>
+        <button class="q-back" id="zip-back" type="button">← ひとつ前にもどる</button>
+      </div>
+
+      <!-- STEP6: 結果 -->
+      <div class="diag" id="step-result" aria-live="polite">
+        <p class="q-no" style="text-align:center">チェック結果</p>
+        <div class="signs" id="signs"></div>
+        <p class="result-title" id="r-title"></p>
+        <p class="result-body" id="r-body"></p>
+        <button class="btn" id="btn-to-form" type="button">この結果について話を聞いてみる</button>
+        <p class="note-under-btn tiny">ご相談は無料です。合わなければ「検討します」で終わりで大丈夫です。</p>
+      </div>
+
+    </div>
+
+    <p class="carriers-line tiny" id="carriers-line" style="margin-top:20px;text-align:center"></p>
+  </div>
+</section>
+
+<!-- ══════════ 2. 実績事例（a1d1と同一ソース・同一打消し表示） ══════════ -->
+<section class="soft" id="cases">
+  <div class="wrap">
+    <h2>家計の見直しやさんが、<br>お手伝いしてきたこと。</h2>
+    <p class="lead">通信費の見直しで、毎月の負担が少し軽くなった方がいます。あくまで一例ですが、こんなご相談がありました。</p>
+    <div class="cases">
+      <!-- 本家 https://kakei.enlife.ltd/ の事例。2026-07-18 に本家HTMLをパースして数値照合済み(a1d1と同一)。
+           ⚠️ 配信前TODO: 根拠資料の保全(a1d1のTODOと共通)。 -->
+      <div class="case">
+        <div class="who">70代・女性</div>
+        <div class="amt"><span class="before">5,500円</span><span class="arrow">→</span>4,500円</div>
+        <div class="save">毎月 −1,000円</div>
+      </div>
+      <div class="case">
+        <div class="who">70代・男性</div>
+        <div class="amt"><span class="before">6,000円</span><span class="arrow">→</span>4,500円</div>
+        <div class="save">毎月 −1,500円</div>
+      </div>
+      <div class="case">
+        <div class="who">60代・女性</div>
+        <div class="amt"><span class="before">6,000円</span><span class="arrow">→</span>4,500円</div>
+        <div class="save">毎月 −1,500円</div>
+      </div>
+      <div class="case">
+        <div class="who">60代・男性</div>
+        <div class="amt"><span class="before">5,500円</span><span class="arrow">→</span>4,500円</div>
+        <div class="save">毎月 −1,000円</div>
+      </div>
+    </div>
+    <p class="note">※ 通信費の見直しをお手伝いした方の一例です（株式会社enlife調べ）。お住まいの環境やご契約・ご利用状況により結果は異なり、同じ金額の削減を保証するものではありません。</p>
+  </div>
+</section>
+
+<!-- ══════════ 3. ご相談の流れ ══════════ -->
+<section id="flow">
+  <div class="wrap">
+    <h2>ご相談の流れ</h2>
+    <p class="lead">むずかしい手続きはありません。ご自身のペースで大丈夫です。</p>
+    <ol class="flow">
+      <li><b>30秒チェック</b><span>お名前やご住所の入力は、まだ不要です。</span></li>
+      <li><b>無料でご相談</b><span>今のプラン内容を、いっしょに見てみるところから。</span></li>
+      <li><b>条件のいい回線をご案内</b><span>合わなければ「検討します」で終わりで大丈夫です。</span></li>
+      <li><b>お申し込みは、ご納得のうえで</b><span>急かしません。ご自身のペースで決めてください。</span></li>
+    </ol>
+    <div class="callout"><b>このページで契約手続きは発生しません。</b>チェックと、そのご説明までが私たちの役割です。</div>
+  </div>
+</section>
+
+<!-- ══════════ 4. 運営者 ══════════ -->
+<section class="soft" id="company">
+  <div class="wrap">
+    <!-- ⚠️「中立」「公平」等の中立性訴求は使わない(エルくん裁定・a1d1と同一)。沖縄を出さない。 -->
+    <p class="company-q">「家計の見直しやさん」は、<br>通信費の見直しをお手伝いする窓口です。</p>
+    <div class="company-body">
+      <p>毎月かかり続けるお金の中で、大きいのに見直されないままになりやすいのが通信費です。一度契約すると、料金も速度もそのまま何年も、ということが起こりがちです。</p>
+      <p>私たちは、その通信費だけを、いっしょに見直すお手伝いをします。今の契約が一番なら、そのままで、とお伝えします。合うものがなければ、勧めません。</p>
+    </div>
+    <div class="company-sign">
+      <b>家計の見直しやさん</b>
+      ネット代（通信費）の見直し相談窓口
+      <p class="tiny" id="carriers-detail" style="margin-top:8px"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 5. FAQ ══════════ -->
+<section id="faq">
+  <div class="wrap">
+    <h2>よくあるご質問</h2>
+    <details>
+      <summary>しつこく連絡が来ませんか？</summary>
+      <p>チェック結果のご説明のため、担当よりご連絡します。「検討します」とお伝えいただければ、そこで終了します。</p>
+    </details>
+    <details>
+      <summary>今使っている回線は、どうなりますか？</summary>
+      <p>解約のタイミングや更新月は契約内容によって異なります。違約金が発生する時期であれば、その事実も含めてお伝えします。乗り換えないほうが良い場合は、そうお伝えします。</p>
+    </details>
+    <details>
+      <summary>工事や費用はどうなりますか？</summary>
+      <p>工事の要否は建物の種別と設備状況によって異なります。チェックとご相談に費用はかかりません。ご契約に進まれる場合は、初期契約解除制度についてもご契約時にご説明します。</p>
+    </details>
+  </div>
+</section>
+
+<!-- ══════════ 6. フォーム ══════════ -->
+<section class="soft" id="form-sec">
+  <div class="wrap">
+    <div id="form-live">
+      <h2 id="form-h2">チェック結果のご連絡先</h2>
+      <p class="lead" style="margin-bottom:18px">お名前とご連絡先だけで大丈夫です。</p>
+      <p class="form-attrib">
+        <b>ご相談は無料です。</b>今の契約のままが得なら、はっきりそうお伝えします。「検討します」の一言で、いつでも終わりにできます。<br>
+        <span class="tiny">運営者の情報は、このページ下部に記載しています。</span>
+      </p>
+      <div class="promise">
+        <b>チェック結果のご説明のため、すぐにご連絡します。</b><br>
+        ご連絡先は結果のご案内にのみ使用し、ご本人の同意なく第三者へ提供することはありません。
+      </div>
+      <form id="lead-form" novalidate data-clarity-mask="true">
+        <div class="field">
+          <label for="f-zip">郵便番号 <span class="tiny" style="font-weight:400">（チェック済み）</span></label>
+          <input type="text" id="f-zip" name="zip" readonly>
+        </div>
+        <div class="field">
+          <label for="f-name">お名前</label>
+          <input type="text" id="f-name" name="name" autocomplete="name" placeholder="山田 太郎">
+          <p class="err" id="name-err">お名前をご入力ください。</p>
+        </div>
+        <div class="field">
+          <label>ご連絡先</label>
+          <div class="tabs" role="tablist">
+            <button type="button" class="tab" id="tab-tel"  role="tab" aria-selected="true">電話</button>
+            <button type="button" class="tab" id="tab-line" role="tab" aria-selected="false">LINE</button>
+          </div>
+          <div id="pane-tel">
+            <input type="tel" id="f-tel" name="tel" inputmode="tel" autocomplete="tel" placeholder="09012345678">
+            <p class="micro">※ 番号は結果連絡のためだけに使用します。</p>
+            <p class="err" id="tel-err">電話番号をご入力ください（10桁または11桁）。</p>
+          </div>
+          <div id="pane-line" hidden>
+            <p class="micro" style="margin:0 0 10px">
+              <!-- TODO(必須): LINE友だち追加の案内画面がまだ存在しない（部品3と接続が必要・a1d1と共通）。 -->
+              LINEをご希望の場合、送信後に友だち追加のご案内を表示します。お電話でのご連絡はいたしません。
+            </p>
+          </div>
+        </div>
+        <button class="btn" type="submit" id="btn-submit">チェック結果の説明を受ける</button>
+        <p class="err" id="submit-err"></p>
+        <p class="tiny" style="margin-top:16px">
+          送信により<a href="#privacy">個人情報の取扱い</a>に同意いただいたものとします。
+        </p>
+      </form>
+    </div>
+    <div class="thanks" id="thanks">
+      <h2>チェック結果をお預かりしました</h2>
+      <p class="lead">担当より、チェック結果のご説明のためご連絡します。</p>
+      <p class="id" id="thanks-id"></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-block">
+      「家計の見直しやさん」は、<b>株式会社enlife</b>が運営するネット代（通信費）見直しのサービスです。
+    </div>
+    <div class="foot-block" id="privacy">
+      <b>個人情報の取扱い</b><br>
+      <!-- TODO(必須): プライバシーポリシーを作成しリンクする(a1d1と共通。要件はa1d1のコメント参照)。 -->
+      ［TODO(必須)：プライバシーポリシーを作成しリンク（運営会社欄に 法人名＋登記住所＋代表者氏名 の3点）］
+    </div>
+    <div class="foot-block">運営会社：株式会社enlife</div>
+    <p class="tiny" id="foot-trademark" style="color:#8f9bb0"></p>
+    <p class="tiny" style="color:#8f9bb0">© 2026 家計の見直しやさん</p>
+  </div>
+</footer>
+
+<div class="sticky" id="sticky">
+  <button class="btn" type="button" id="btn-sticky">30秒の固定費チェックをはじめる</button>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ══════════════════════════════════════════════════════════
+   TODO(必須): Power Automate「HTTP 要求の受信時」トリガーのURL(a1d1と共通)。
+   未設定の間はリードが1件も届かない（送信は中止・偽の完了画面は出さない）。
+   ══════════════════════════════════════════════════════════ */
+var FORM_ENDPOINT = "";
+var SHARED_SECRET = "";
+var SUBMIT_TIMEOUT_MS = 15000;
+var LP_ID = "A2";
+
+/* ══════════════════════════════════════════════════════════
+   TODO(必須): 計測ID(a1d1と共通の方式)。空の間はタグを一切読み込まない。
+   本LPは設問別離脱の週次分析が存在意義のため、配信前に必ず設定すること。
+   ══════════════════════════════════════════════════════════ */
+var GA4_ID = "";
+var CLARITY_ID = "";
+
+/* ブランド名表示スイッチ(a1d1と共通裁定。代理店契約確認まで false) */
+var SHOW_BRAND_NAMES = false;
+var COPY = SHOW_BRAND_NAMES ? {
+  carriersLine:   "NURO光・ソフトバンク光・ドコモ光など、主要な光回線から診断します。",
+  carriersDetail: "NURO光、ソフトバンク光、ドコモ光など、主要な光回線を扱っています。お住まいの住所で実際に使える回線を並べ、料金と速度を比べたうえでご説明します。選ぶのはお客様です。",
+  trademark:      "※ 記載の各サービス名称は、各社の商標または登録商標です。"
+} : {
+  carriersLine:   "光回線・ホームルーターなど、複数の選択肢からお住まいに合うものをご案内します。",
+  carriersDetail: "お住まいの住所で実際に使える回線を並べ、料金と速度を比べたうえでご説明します。選ぶのはお客様です。",
+  trademark:      ""
+};
+
+/* エリア判定(a1d1と同一の陰性フィルタ。出典・注意もa1d1のコメント参照) */
+var PREF_RANGES = [
+  ["北海道",  1,  9],["秋田", 10, 19],["岩手", 20, 29],["青森", 30, 39],["北海道", 40, 99],
+  ["東京",100,208],["神奈川",210,259],["千葉",260,299],
+  ["茨城",300,319],["栃木",320,329],["埼玉",330,369],["群馬",370,379],
+  ["長野",380,399],["山梨",400,409],["静岡",410,439],["愛知",440,498],
+  ["岐阜",500,509],["三重",510,519],["滋賀",520,529],["大阪",530,599],
+  ["京都",600,629],["奈良",630,639],["和歌山",640,649],["兵庫",650,679],
+  ["鳥取",680,689],["島根",690,699],["岡山",700,719],["広島",720,739],
+  ["山口",740,759],["香川",760,769],["徳島",770,779],["高知",780,789],
+  ["愛媛",790,799],["福岡",800,839],["佐賀",840,849],["長崎",850,859],
+  ["熊本",860,869],["大分",870,879],["宮崎",880,889],["鹿児島",890,899],
+  ["沖縄",900,909],["福井",910,919],["石川",920,929],["富山",930,939],
+  ["新潟",940,959],["福島",960,979],["宮城",980,989],["山形",990,999]
+];
+var NURO_2G = ["北海道","東京","神奈川","埼玉","千葉","茨城","栃木","群馬","愛知","静岡",
+               "岐阜","三重","大阪","兵庫","京都","滋賀","奈良","広島","岡山","福岡","佐賀"];
+var NURO_10G_ONLY = ["宮城","福島","山形"];
+function prefOf(prefix3){
+  var n = parseInt(prefix3, 10);
+  for(var i=0;i<PREF_RANGES.length;i++){
+    if(n >= PREF_RANGES[i][1] && n <= PREF_RANGES[i][2]) return PREF_RANGES[i][0];
+  }
+  return "";
+}
+
+/* ---------- 計測(a1d1と同一の一本化設計 + a2の設問イベント) ---------- */
+window.dataLayer = window.dataLayer || [];
+if(GA4_ID){
+  var _gs = document.createElement("script");
+  _gs.async = true;
+  _gs.src = "https://www.googletagmanager.com/gtag/js?id=" + GA4_ID;
+  document.head.appendChild(_gs);
+  window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
+  gtag("js", new Date());
+  gtag("config", GA4_ID, { send_page_view: false });
+}
+if(CLARITY_ID){
+  (function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window, document, "clarity", "script", CLARITY_ID);
+  clarity("set", "lp_id", LP_ID);
+}
+function track(name, params){
+  var payload = Object.assign({event:name, lp_id:LP_ID, session_id:SESSION_ID}, CTX, params||{});
+  window.dataLayer.push(payload);
+  if(GA4_ID && typeof window.gtag === "function"){
+    gtag("event", name, Object.assign({lp_id:LP_ID, session_id:SESSION_ID}, params||{}));
+  }
+  if(CLARITY_ID && typeof window.clarity === "function"){
+    clarity("event", name);
+  }
+  if(window.console && console.debug) console.debug('[track]', name, payload);
+}
+
+/* ---------- ID(a1d1と同一) ---------- */
+function rand8(){
+  var c="0123456789ABCDEFGHJKMNPQRSTVWXYZ", o="", a=new Uint8Array(8);
+  (window.crypto||window.msCrypto).getRandomValues(a);
+  for(var i=0;i<8;i++) o+=c[a[i]%32];
+  return o;
+}
+function today(){var d=new Date();return ""+d.getFullYear()+("0"+(d.getMonth()+1)).slice(-2)+("0"+d.getDate()).slice(-2);}
+var SESSION_ID = sessionStorage.getItem("hk_sid") || ("S-"+today()+"-"+rand8());
+sessionStorage.setItem("hk_sid", SESSION_ID);
+
+var CTX = (function(){
+  var saved = sessionStorage.getItem("hk_ctx");
+  if(saved){ try{ return JSON.parse(saved); }catch(e){} }
+  var q = new URLSearchParams(location.search);
+  var c = {
+    utm_source:q.get("utm_source")||"", utm_medium:q.get("utm_medium")||"",
+    utm_campaign:q.get("utm_campaign")||"", utm_content:q.get("utm_content")||"",
+    utm_term:q.get("utm_term")||"", gclid:q.get("gclid")||"", fbclid:q.get("fbclid")||"",
+    referrer:document.referrer||"", landing_page:location.pathname+location.search
+  };
+  if(!c.utm_source){
+    c.utm_source = c.gclid ? "google" : (c.fbclid ? "meta" : "organic_direct");
+    c.utm_medium = c.utm_medium || "none";
+  }
+  sessionStorage.setItem("hk_ctx", JSON.stringify(c));
+  return c;
+})();
+
+var $ = function(id){ return document.getElementById(id); };
+var stepIntro=$("step-intro"), stepQ=$("step-q"), stepZip=$("step-zip"), stepResult=$("step-result"),
+    qNo=$("q-no"), qTitle=$("q-title"), qOpts=$("q-opts"), qBack=$("q-back"), prog=$("prog"),
+    zip=$("zip"), btnCheck=$("btn-check"), zipErr=$("zip-err"),
+    rTitle=$("r-title"), rBody=$("r-body"), signsEl=$("signs"),
+    btnToForm=$("btn-to-form"), sticky=$("sticky"), btnSticky=$("btn-sticky"),
+    formSec=$("form-sec"), form=$("lead-form"), fZip=$("f-zip"), fName=$("f-name"),
+    fTel=$("f-tel"), tabTel=$("tab-tel"), tabLine=$("tab-line"),
+    paneTel=$("pane-tel"), paneLine=$("pane-line"), btnSubmit=$("btn-submit"),
+    thanks=$("thanks"), formLive=$("form-live"), hero=document.querySelector(".hero"),
+    diagCard=$("diag-card");
+
+var areaStatus="", planScope="", contactType="tel", submitting=false;
+
+$("carriers-line").textContent   = COPY.carriersLine;
+$("carriers-detail").textContent = COPY.carriersDetail;
+$("foot-trademark").textContent  = COPY.trademark;
+
+track("page_view");
+
+/* ══════════ 設問定義（本LPの心臓部。docs/計測イベント設計.md 準拠） ══════════
+   sign: その回答が「見直しサイン」に数えられるか（結果表示ロジック用）。
+   誠実性: サインは「見直す価値があるかもしれない状態」の目安であり、削減を約束しない。 */
+var QS = [
+  { id:"household", title:"ご自宅で、インターネットを使うのは何人ですか？",
+    opts:[
+      {id:"one",   label:"1人",       sign:false},
+      {id:"two",   label:"2人",       sign:false},
+      {id:"family",label:"3〜4人",    sign:false},
+      {id:"many",  label:"5人以上",   sign:false}
+    ]},
+  { id:"cost_awareness", title:"毎月のネット代（スマホ以外）が、いくらか言えますか？",
+    opts:[
+      {id:"exact", label:"だいたい言える",       sign:false},
+      {id:"vague", label:"なんとなくなら…",      sign:true},
+      {id:"no",    label:"正直、わからない",     sign:true}
+    ]},
+  { id:"line_type", title:"ご自宅のネット回線は、どちらに近いですか？",
+    opts:[
+      {id:"hikari",  label:"光回線（工事して引いたもの）", sign:false},
+      {id:"router",  label:"ホームルーター・ポケット型",   sign:false},
+      {id:"tether",  label:"スマホの通信だけでやりくり",   sign:true},
+      {id:"unknown", label:"わからない",                   sign:true}
+    ]},
+  { id:"years", title:"今の回線を契約してから、どのくらい経ちますか？",
+    opts:[
+      {id:"lt1",     label:"1年未満",       sign:false},
+      {id:"y1_3",    label:"1〜3年",        sign:false},
+      {id:"gt3",     label:"3年以上",       sign:true},
+      {id:"unknown", label:"覚えていない",  sign:true}
+    ]}
+];
+var answers = {};   /* q_id → {id, sign}。計測にはIDのみ送る(自由記述なし) */
+var qIndex = 0;
+
+function showStep(el){
+  [stepIntro, stepQ, stepZip, stepResult].forEach(function(s){ s.classList.remove("show"); });
+  el.classList.add("show");
+}
+function renderQ(){
+  var q = QS[qIndex];
+  qNo.textContent = "Q" + (qIndex+1) + " / " + (QS.length+1);
+  qTitle.textContent = q.title;
+  prog.style.width = Math.round((qIndex) / (QS.length+1) * 100) + "%";
+  qOpts.innerHTML = "";
+  q.opts.forEach(function(o){
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "opt"; b.textContent = o.label;
+    b.setAttribute("aria-pressed", answers[q.id] && answers[q.id].id === o.id ? "true" : "false");
+    b.addEventListener("click", function(){
+      answers[q.id] = {id:o.id, sign:o.sign};
+      track("q_answer", {q_no:qIndex+1, q_id:q.id, answer:o.id});
+      qIndex++;
+      if(qIndex < QS.length){ renderQ(); }
+      else{
+        showStep(stepZip);
+        $("zip-no").textContent = "Q" + (QS.length+1) + " / " + (QS.length+1);
+        track("q_view", {q_no:QS.length+1, q_id:"zip"});
+        setTimeout(function(){ zip.focus(); }, 250);
+      }
+    });
+    qOpts.appendChild(b);
+  });
+  qBack.style.visibility = qIndex === 0 ? "hidden" : "visible";
+  track("q_view", {q_no:qIndex+1, q_id:q.id});
+}
+$("btn-start").addEventListener("click", function(){
+  track("diagnosis_start");
+  showStep(stepQ); renderQ();
+});
+qBack.addEventListener("click", function(){
+  if(qIndex === 0) return;
+  qIndex--; track("q_back", {q_no:qIndex+1});
+  renderQ();
+});
+$("zip-back").addEventListener("click", function(){
+  qIndex = QS.length - 1; track("q_back", {q_no:qIndex+1});
+  showStep(stepQ); renderQ();
+});
+
+/* ---------- 郵便番号 整形 ---------- */
+zip.addEventListener("input", function(){
+  var v=zip.value.replace(/[^0-9]/g,"").slice(0,7);
+  zip.value = v.length>3 ? v.slice(0,3)+"-"+v.slice(3) : v;
+  zipErr.style.display="none";
+});
+zip.addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); btnCheck.click(); } });
+
+/* ---------- 結果（area_check + diagnosis_result） ---------- */
+function runCheck(){
+  var digits=zip.value.replace(/[^0-9]/g,"");
+  if(digits.length!==7){
+    zipErr.style.display="block";
+    track("form_field_error",{field:"zip",reason:"format"});
+    zip.focus(); return;
+  }
+  var prefix=digits.slice(0,3), pref=prefOf(prefix);
+  var is2G=NURO_2G.indexOf(pref)>=0, is10G=NURO_10G_ONLY.indexOf(pref)>=0;
+  areaStatus=(!pref||is2G||is10G)?"maybe":"out";
+  planScope=is10G?"10g_only":(is2G?"2g_10g":"");
+  track("area_check",{result:areaStatus,zip_prefix:prefix,prefecture:pref||"unknown",plan_scope:planScope});
+
+  /* サイン集計（削減額は約束しない。目安の個数表示のみ） */
+  var signCount = 0;
+  QS.forEach(function(q){ if(answers[q.id] && answers[q.id].sign) signCount++; });
+  signsEl.innerHTML = "";
+  for(var i=0;i<QS.length;i++){
+    var s = document.createElement("span");
+    s.className = "sign" + (i < signCount ? " on" : "");
+    s.textContent = i < signCount ? "！" : "";
+    signsEl.appendChild(s);
+  }
+
+  var resultType;
+  if(signCount >= 2){
+    resultType = "signs_" + signCount;
+    rTitle.textContent = "見直しのサインが " + signCount + "つ 見つかりました。";
+    rBody.textContent = "料金の把握や契約時期に「そのままになっているかも」のサインがあります。今の契約が一番なら、そのままで大丈夫、とお伝えします。まずは今の状態を、いっしょに確認してみませんか。";
+  }else if(signCount === 1){
+    resultType = "signs_1";
+    rTitle.textContent = "見直しのサインが 1つ 見つかりました。";
+    rBody.textContent = "おおむね把握されていますが、ひとつ気になる点があります。確認だけなら無料です。今のままが一番なら、その旨をはっきりお伝えします。";
+  }else{
+    resultType = "signs_0";
+    rTitle.textContent = "しっかり把握されています。";
+    rBody.textContent = "毎月の内容をよく把握されているようです。それでも、お住まいのエリアで今選べる回線と比べて損がないかは、確認してみる価値があります。";
+  }
+  if(areaStatus === "out"){
+    rBody.textContent += " なお、お住まいのエリアで選べる回線は限られますが、その中から条件の良いものをお調べしてご案内します。";
+    btnToForm.textContent = "このエリアで選べる回線を聞いてみる";
+  }else{
+    btnToForm.textContent = "この結果について話を聞いてみる";
+  }
+  track("diagnosis_result",{result_type:resultType, sign_count:signCount, area_status:areaStatus});
+
+  prog.style.width = "100%";
+  showStep(stepResult);
+  sticky.classList.remove("show");
+  fZip.value = zip.value;
+  $("form-h2").textContent = areaStatus==="maybe" ? "チェック結果のご連絡先" : "このエリアで選べる回線のご連絡先";
+  diagCard.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+btnCheck.addEventListener("click", function(){ track("cta_click_hero"); runCheck(); });
+btnToForm.addEventListener("click", function(){
+  track("cta_click_mid");
+  formSec.scrollIntoView({behavior:"smooth"});
+  setTimeout(function(){ fName.focus(); },500);
+});
+btnSticky.addEventListener("click", function(){
+  track("cta_click_footer");
+  window.scrollTo({top:0,behavior:"smooth"});
+  if(stepIntro.classList.contains("show")){
+    setTimeout(function(){ $("btn-start").click(); },450);
+  }
+});
+
+/* ---------- セクション到達（診断用・a1d1と同一） ---------- */
+(function(){
+  if(!("IntersectionObserver" in window)) return;
+  var targets = [
+    {el:$("cases"),   name:"section_view_cases"},
+    {el:$("flow"),    name:"section_view_flow"},
+    {el:$("company"), name:"section_view_company"}
+  ];
+  var timers={};
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var t=targets.filter(function(x){return x.el===e.target;})[0];
+      if(!t) return;
+      if(e.isIntersecting){
+        timers[t.name]=setTimeout(function(){ track(t.name); io.unobserve(t.el); },1000);
+      }else{ clearTimeout(timers[t.name]); }
+    });
+  },{threshold:0.5});
+  targets.forEach(function(t){ if(t.el) io.observe(t.el); });
+})();
+
+setTimeout(function(){ track("time_15s"); },15000);
+setTimeout(function(){ track("time_60s"); },60000);
+
+/* ---------- 追従バー ---------- */
+var heroObserver=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting) sticky.classList.remove("show");
+    else if(!stepResult.classList.contains("show")) sticky.classList.add("show");
+  });
+},{threshold:0});
+heroObserver.observe(hero);
+
+/* ---------- 連絡手段タブ ---------- */
+function setContact(t){
+  contactType=t;
+  tabTel.setAttribute("aria-selected",t==="tel");
+  tabLine.setAttribute("aria-selected",t==="line");
+  paneTel.hidden=(t!=="tel"); paneLine.hidden=(t!=="line");
+  track("contact_type_change",{contact_type:t});
+}
+tabTel.addEventListener("click", function(){ setContact("tel"); });
+tabLine.addEventListener("click", function(){ setContact("line"); });
+
+/* ---------- form_start（唯一の判定指標・a1d1と同一） ---------- */
+var formStarted=false;
+form.addEventListener("focusin", function(){
+  if(formStarted) return; formStarted=true; track("form_start");
+}, true);
+form.addEventListener("focusin", function(){ sticky.classList.remove("show"); });
+
+/* ---------- form_submit → lead_created（a1d1と同一。payloadスキーマ共通） ---------- */
+function showErr(el,on){ el.style.display=on?"block":"none"; }
+form.addEventListener("submit", function(e){
+  e.preventDefault();
+  if(submitting) return;
+  if(!areaStatus){
+    $("submit-err").textContent="先に30秒チェックを行ってください。";
+    showErr($("submit-err"),true); window.scrollTo({top:0,behavior:"smooth"}); return;
+  }
+  var ok=true;
+  if(!fName.value.trim()){ showErr($("name-err"),true); track("form_field_error",{field:"name"}); ok=false; }
+  else showErr($("name-err"),false);
+  var tel=fTel.value.replace(/[^0-9]/g,"");
+  if(contactType==="tel"){
+    if(!(tel.length===10||tel.length===11)){ showErr($("tel-err"),true); track("form_field_error",{field:"tel",reason:"format"}); ok=false; }
+    else showErr($("tel-err"),false);
+  }
+  if(!ok) return;
+
+  var leadId="HK-"+today()+"-"+LP_ID+"-"+rand8();
+  /* 診断回答はpayloadに含めない(Power Automateスキーマをa1d1と共通に保つ)。
+     回答はq_answerイベントでsession_id付き計測済み → リードとはsession_idで突合可能 */
+  var payload=Object.assign({
+    lead_id:leadId, session_id:SESSION_ID, lp_id:LP_ID, zip:fZip.value,
+    name:fName.value.trim(), contact_type:contactType,
+    tel:contactType==="tel"?tel:"", area_status:areaStatus, plan_scope:planScope,
+    submitted_at:new Date().toISOString()
+  }, CTX);
+  track("form_submit",{lead_id:leadId,area_status:areaStatus});
+
+  submitting=true; btnSubmit.disabled=true; btnSubmit.textContent="送信しています…";
+  function fail(msg,reason){
+    submitting=false; btnSubmit.disabled=false; btnSubmit.textContent="チェック結果の説明を受ける";
+    $("submit-err").textContent=msg; showErr($("submit-err"),true);
+    track("form_submit_error",{reason:reason,lead_id:leadId});
+  }
+  if(!FORM_ENDPOINT){
+    fail("送信先が未設定です（FORM_ENDPOINT）。配信前に設定してください。","endpoint_unset");
+    console.error("[hikari-hq] FORM_ENDPOINT 未設定のため送信を中止。payload=",payload); return;
+  }
+  var headers={"Content-Type":"application/json"};
+  if(SHARED_SECRET) headers["x-lp-key"]=SHARED_SECRET;
+  var ctl=("AbortController" in window)?new AbortController():null;
+  var timer=setTimeout(function(){ if(ctl) ctl.abort(); }, SUBMIT_TIMEOUT_MS);
+  fetch(FORM_ENDPOINT,{method:"POST",headers:headers,body:JSON.stringify(payload),signal:ctl?ctl.signal:undefined})
+  .then(function(res){
+    clearTimeout(timer);
+    if(!(res.status===200||res.status===201||res.status===202)) throw new Error("http_"+res.status);
+    track("lead_created",{lead_id:leadId,area_status:areaStatus});
+    $("thanks-id").textContent="受付番号："+leadId;
+    formLive.style.display="none"; thanks.classList.add("show");
+    thanks.scrollIntoView({behavior:"smooth",block:"center"});
+  })
+  .catch(function(err){
+    clearTimeout(timer);
+    var aborted=err&&err.name==="AbortError";
+    fail(aborted?"送信に時間がかかっています。通信環境をご確認のうえ、もう一度お試しください。"
+                :"送信に失敗しました。通信環境をご確認のうえ、もう一度お試しください。",
+         aborted?"timeout":String(err&&err.message||err));
+  });
+});
+
+})();
+</script>
+</body>
+</html>
