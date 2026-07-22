@@ -400,7 +400,7 @@
         ご連絡先は結果のご案内にのみ使用し、ご本人の同意なく第三者へ提供することはありません。
       </div>
 
-      <form id="lead-form" novalidate>
+      <form id="lead-form" novalidate data-clarity-mask="true">
         <div class="field">
           <label for="f-zip">郵便番号 <span class="tiny" style="font-weight:400">（診断済み）</span></label>
           <input type="text" id="f-zip" name="zip" readonly>
@@ -489,6 +489,18 @@ var SUBMIT_TIMEOUT_MS = 15000;
 var LP_ID = "A1D1";
 
 /* ══════════════════════════════════════════════════════════
+   TODO(必須): 計測ID。空の間はタグを一切読み込まない(挙動は従来どおり)。
+   GA4_ID: GA4プロパティのウェブストリーム測定ID(例 "G-XXXXXXXXXX")
+   CLARITY_ID: Microsoft ClarityのプロジェクトID(例 "abcdefghij")
+   設定後commitでGitHub Pagesに自動反映。イベント設計は
+   hikari-hq の docs/計測イベント設計.md 参照。
+   ⚠️ フォーム入力値は送らない(track()の設計を崩さないこと)。
+   フォーム自体は data-clarity-mask で録画マスク済み。
+   ══════════════════════════════════════════════════════════ */
+var GA4_ID = "";
+var CLARITY_ID = "";
+
+/* ══════════════════════════════════════════════════════════
    ブランド名（NURO光/ソフトバンク光/ドコモ光）の表示スイッチ。現在 false。
    代理店契約が確認できるまでブランド名を出さない（優良誤認/Google商標ポリシー/
    共有ドメインの巻き添えリスク）。契約確認後に true で一括復帰。
@@ -552,9 +564,41 @@ function prefOf(prefix3){
    判定指標は form_start率の1本のみ（ab-chan・事前登録）。他は診断用。
    scroll_% は廃止し section_view_* に一本化。今回 cases/flow を追加。 */
 window.dataLayer = window.dataLayer || [];
+
+/* GA4: gtag.js を GA4_ID 設定時のみ読み込む。page_view の自動送信は切り、
+   track() 経由の1本に統一する(dataLayerとGA4でイベントがズレないように)。
+   gtagのarguments形式pushと従来のオブジェクト形式pushは同じdataLayerで共存できる。 */
+if(GA4_ID){
+  var _gs = document.createElement("script");
+  _gs.async = true;
+  _gs.src = "https://www.googletagmanager.com/gtag/js?id=" + GA4_ID;
+  document.head.appendChild(_gs);
+  window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
+  gtag("js", new Date());
+  gtag("config", GA4_ID, { send_page_view: false });
+}
+
+/* Clarity: CLARITY_ID 設定時のみ読み込む(公式スニペット)。
+   フォームは data-clarity-mask 済み。入力値は録画に残らない。 */
+if(CLARITY_ID){
+  (function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window, document, "clarity", "script", CLARITY_ID);
+  clarity("set", "lp_id", LP_ID);
+}
+
 function track(name, params){
   var payload = Object.assign({event:name, lp_id:LP_ID, session_id:SESSION_ID}, CTX, params||{});
   window.dataLayer.push(payload);
+  if(GA4_ID && typeof window.gtag === "function"){
+    /* CTX(utm等)はGA4がURLから自得するため送らない。個別paramsとID類のみ */
+    gtag("event", name, Object.assign({lp_id:LP_ID, session_id:SESSION_ID}, params||{}));
+  }
+  if(CLARITY_ID && typeof window.clarity === "function"){
+    clarity("event", name);
+  }
   if(window.console && console.debug) console.debug('[track]', name, payload);
 }
 
