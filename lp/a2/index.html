@@ -409,7 +409,7 @@
           </div>
           <div id="pane-line" hidden>
             <p class="micro" style="margin:0 0 10px">
-              <!-- TODO(必須): LINE友だち追加の案内画面がまだ存在しない（部品3と接続が必要・a1d1と共通）。 -->
+              <!-- 案内画面は実装済(thanks内の #line-add)。LINE_ADD_URL の設定待ち(要裁定・a1d1と共通)。 -->
               LINEをご希望の場合、送信後に友だち追加のご案内を表示します。お電話でのご連絡はいたしません。
             </p>
           </div>
@@ -423,8 +423,10 @@
     </div>
     <div class="thanks" id="thanks">
       <h2>チェック結果をお預かりしました</h2>
-      <p class="lead">担当より、チェック結果のご説明のためご連絡します。</p>
+      <p class="lead" id="thanks-lead">担当より、チェック結果のご説明のためご連絡します。</p>
       <p class="id" id="thanks-id"></p>
+      <a class="btn" id="line-add" style="display:none;max-width:340px;margin:20px auto 0"
+         target="_blank" rel="noopener">LINEで友だち追加して結果を受け取る</a>
     </div>
   </div>
 </section>
@@ -468,6 +470,9 @@ var LP_ID = "A2";
    ══════════════════════════════════════════════════════════ */
 var GA4_ID = "";
 var CLARITY_ID = "";
+
+/* TODO(必須): LINE友だち追加URL(a1d1と共通。どのアカウントを使うかは要裁定) */
+var LINE_ADD_URL = "";
 
 /* ブランド名表示スイッチ(a1d1と共通裁定。代理店契約確認まで false) */
 var SHOW_BRAND_NAMES = false;
@@ -844,6 +849,13 @@ form.addEventListener("submit", function(e){
     if(!(res.status===200||res.status===201||res.status===202)) throw new Error("http_"+res.status);
     track("lead_created",{lead_id:leadId,area_status:areaStatus});
     $("thanks-id").textContent="受付番号："+leadId;
+    if(contactType==="line" && LINE_ADD_URL){
+      var la=$("line-add");
+      la.href=LINE_ADD_URL; la.style.display="block";
+      $("thanks-lead").textContent="下のボタンから友だち追加いただくと、LINEでチェック結果をご案内します。";
+      la.addEventListener("click", function(){ track("line_add_click",{lead_id:leadId}); });
+      track("line_add_view",{lead_id:leadId});
+    }
     formLive.style.display="none"; thanks.classList.add("show");
     thanks.scrollIntoView({behavior:"smooth",block:"center"});
   })
