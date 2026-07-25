@@ -800,14 +800,20 @@ form.addEventListener("submit", function(e){
     fail("送信先が未設定です（FORM_ENDPOINT）。配信前に設定してください。","endpoint_unset");
     console.error("[hikari-hq] FORM_ENDPOINT 未設定のため送信を中止。payload=",payload); return;
   }
-  var headers={"Content-Type":"application/json"};
+  /* Yoom's webhook endpoint doesn't send Access-Control-Allow-Origin (no CORS
+     support), so a normal cross-origin JSON POST is blocked at the preflight.
+     Content-Type text/plain keeps this a CORS-safelisted "simple request" (no
+     preflight), and mode:"no-cors" lets the actual POST through despite the
+     opaque, unreadable response. Trade-off: we can no longer read res.status,
+     so we treat "fetch didn't throw" as success. If SHARED_SECRET is ever set,
+     the added x-lp-key header will force a preflight again and break this. */
+  var headers={"Content-Type":"text/plain"};
   if(SHARED_SECRET) headers["x-lp-key"]=SHARED_SECRET;
   var ctl=("AbortController" in window)?new AbortController():null;
   var timer=setTimeout(function(){ if(ctl) ctl.abort(); }, SUBMIT_TIMEOUT_MS);
-  fetch(FORM_ENDPOINT,{method:"POST",headers:headers,body:JSON.stringify(payload),signal:ctl?ctl.signal:undefined})
+  fetch(FORM_ENDPOINT,{method:"POST",mode:"no-cors",headers:headers,body:JSON.stringify(payload),signal:ctl?ctl.signal:undefined})
   .then(function(res){
     clearTimeout(timer);
-    if(!(res.status===200||res.status===201||res.status===202)) throw new Error("http_"+res.status);
     track("lead_created",{lead_id:leadId,area_status:areaStatus});
     $("thanks-id").textContent="受付番号："+leadId;
     if(contactType==="line" && LINE_ADD_URL){
