@@ -3,3 +3,6 @@ Thumbs.db
 *.log
 
 .claude/tools/.env
+
+# 内部戦略・KPIを含むためコミット禁止(hikari-lp-integrityルール2: 公開リポに戦略を置かない)
+.claude/skills/
