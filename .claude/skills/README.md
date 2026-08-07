@@ -26,3 +26,5 @@ for d in /tmp/sp/skills/*/; do
   rm -rf ".claude/skills/$name" && cp -r "$d" ".claude/skills/$name"
 done
 ```
+
+ALLGROUP共通スキル(humanizer / resilient-agent-design / mindshare-arbitrage)は hojo-hq を本店として同期している。
